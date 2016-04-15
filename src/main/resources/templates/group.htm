@@ -1,0 +1,353 @@
+<%
+
+local nixio = require "nixio"
+local brxydispatcher = require "luci.tools.brxydispatcher"
+local table = require "table"
+
+
+local h = require "luci.http"
+
+
+	
+if h.formvalue('act') == 'getRFIDConfig' then
+	h.prepare_content("application/json")
+	local data = brxydispatcher.getRFIDConfig()
+	h.write_json({data=data})
+	return
+
+	
+elseif h.formvalue('act') == 'saveCard' then
+	h.prepare_content("application/json")
+	local addCardID = h.formvalue('addCardID')	
+	local addCardUsername = h.formvalue('addCardUsername')
+	local re,msg = brxydispatcher.saveCard(addCardID,addCardUsername)
+	h.write_json({result=re, msg=msg})
+	return
+	
+	
+elseif h.formvalue('act') == 'readCard' then
+	h.prepare_content("application/json")
+	local re,msg,cardID = brxydispatcher.readCard()
+	h.write_json({result=re, msg=msg,cardID=cardID})
+	return
+	
+elseif h.formvalue('act') == 'deleteCard' then
+	h.prepare_content("application/json")
+	local deleteCardID = h.formvalue('deleteCardID')	
+	local re,msg = brxydispatcher.deleteCard(deleteCardID)
+	h.write_json({result=re, msg=msg})
+	return
+	
+elseif h.formvalue('act') == 'queryGroup' then
+	h.prepare_content("application/json")	
+	local data = brxydispatcher.queryGroup()
+	h.write_json({data=data})
+	return
+	
+elseif h.formvalue('act') == 'saveRFIDConfig' then
+	h.prepare_content("application/json")	
+	local RFIDWorkMode = h.formvalue('RFIDWorkMode')	
+	local RFIDWorkTime = h.formvalue('RFIDWorkTime')
+	
+	local re,msg = brxydispatcher.saveRFIDConfig(RFIDWorkMode,RFIDWorkTime)
+	h.write_json({result=re, msg=msg})
+	return
+	
+end
+
+%>
+
+
+<%+header%>
+
+
+<input type="hidden" id="baseUrl" value="<%=resource%>" />
+<input type="hidden" id="loginUrl" value="<%=luci.dispatcher.build_url()%>" />
+<link rel="stylesheet" type="text/css" href="<%=resource%>/jquery-ui/jquery-ui.min.css">
+<form id="aioConfigForm">
+
+	<div class="cbi-map" id="cbi-unitmachine">
+		
+		<div class="zTreeDemoBackground left" id="left" >					
+			<ul id="group" class="ztree"> </ul>
+		</div>
+		
+		
+		<fieldset id="groupList">
+			<legend>
+				RFID卡管理
+			</legend>
+			<table>				
+				<tr>
+					<td>分组树</td>
+					
+				</tr>
+			</table>
+		</fieldset>		
+		
+		
+		<input type="button"  value="apply" class="cbi-button cbi-button-apply">
+		<input type="button"  value="save" class="cbi-button cbi-button-save">
+		<input type="button"  value="reset" class="cbi-button cbi-button-reset">
+		<input type="button"  value="up" class="cbi-button cbi-button-up">
+		<input type="button"  value="down" class="cbi-button cbi-button-down">
+		<input type="button"  value="find" class="cbi-button cbi-button-find">
+		<input type="button"  value="add" class="cbi-button cbi-button-add">
+		<input type="button"  value="edit" class="cbi-button cbi-button-edit">
+		<input type="button"  value="remove" class="cbi-button cbi-button-remove">
+		<input type="button"  value="reload" class="cbi-button cbi-button-reload">
+		<input type="button"  value="link" class="cbi-button cbi-button-link">
+		<input type="button"  value="download" class="cbi-button cbi-button-download">
+		
+		&nbsp;&nbsp;
+		<br>
+		<br>
+		
+		<input type="text" value="up" class="cbi-input-up">
+		<input type="text" value="down" class="cbi-input-down">
+		<input type="text" value="find" class="cbi-input-find">
+		<input type="text" value="add" class="cbi-input-add">
+		<input type="text" value="apply" class="cbi-input-apply">
+		<input type="text" value="reset" class="cbi-input-reset">
+		<input type="text" value="edit" class="cbi-input-edit">
+		<input type="text" value="remove" class="cbi-input-remove">
+		<input type="text" value="reload" class="cbi-input-reload">
+		<input type="text" value="link" class="cbi-input-link">
+		<input type="text" value="download" class="cbi-input-download">
+		
+		
+		<div id="radioset">
+				<input type="radio" id="radio1" name="radio"><label for="radio1">Choice 1</label>
+				<input type="radio" id="radio2" name="radio" checked="checked"><label for="radio2">Choice 2</label>
+				<input type="radio" id="radio3" name="radio"><label for="radio3">Choice 3</label>
+			</div>
+	</div>
+
+</form>
+
+ <style>
+        *{padding: 0; margin: 0}
+        .box{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.2);
+            display: none;
+        }
+        .box1{
+            width: 500px;
+            height: 500px;
+            position: fixed;left: 50%; top: 25%;
+            margin-left: -250px;
+            border: 1px solid #000000;
+        }
+    </style>
+    
+    <div class="box">
+        <div class="box1">
+            <a href="javascript:;" onclick="jQuery('.box').hide()" class="close">关闭</a>
+        </div>
+    </div>
+    <a href="javascript:;" onclick="jQuery('.box').show()" class="show">显示</a>
+
+<script type="text/javascript" src="<%=resource%>/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/jquery.validate.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="<%=resource%>/brxyTool.js"></script>
+
+<script type="text/javascript">
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++初始化页面数据++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+$(function(){
+	
+	queryGroup();
+
+});
+
+function queryGroup(){
+	console.log("luci page queryGroup ");
+	$.ajax({
+		type : "post",
+		dataType : "json",
+		url : '<%=REQUEST_URI%>',
+		data : {
+			act : "queryGroup"
+		},
+		error : function(xhr, status, e) {
+			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+			console.log(xhr.responseText);
+			alert("queryRFIDCard数据失败");
+		},
+		beforeSend : function() {
+			openWaitBox();
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+			closeWaitBox();
+		},
+		success : function(result) {
+			cardListInit(result.data);
+		}
+	});
+
+}
+
+function cardListInit(data){
+	console.info("dataInit 初始化数据到页面");
+	var html = "";
+	for ( var i in data) {
+		var card = data[i];
+		html += "<tr><td>" + card.cardID 
+		+ "</td><td>" + card.username	
+		+ "</td><td>" + card.phone 
+		+ "</td><td>" + card.recordDate 
+		+ "</td><td><input type='button' name='deleteCard' id="
+				+ card.cardID
+				+ " value='删除' class='cbi-button cbi-button-remove'></td></tr>";
+	}
+	if(html==""){
+		html = "<tr><td colspan='4'>暂无数据</td></tr>";
+	}
+	$("#cardListBody").html(html);
+}
+
+
+function deleteCard(deleteCardID){
+	console.log("deleteCard");
+	$.ajax({
+		type : "post",
+		dataType : "json",
+		url : '<%=REQUEST_URI%>',
+		data : {
+			act : "deleteCard",
+			deleteCardID:deleteCardID			
+		},
+		error : function(xhr, status, e) {
+			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+			console.log(xhr.responseText);
+			alert("删除失败");
+		},
+		beforeSend : function() {
+			openWaitBox();
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+			closeWaitBox();
+		},
+		success : function(result) {
+			alert(result.msg);
+			if(result.result){
+				queryGroup();
+			}
+		}
+	});
+}
+
+//+++++++++++++++++++++++++++++++++RFID卡管理+++++++++++++++++++++++++++++++++++++++++
+$(function(){
+
+	$("#saveCard").click(function(){
+		var addCardUsername = $("#addCardUsername").val();
+		var addCardID = $("#addCardID").val();
+		if(addCardID&&addCardID!=""){
+			if(addCardUsername&&addCardUsername!=""){		
+				saveCard(addCardID,addCardUsername);
+			}else{
+				alert("用户姓名不能为空");
+			}
+		}else{
+			alert("卡号不能为空");
+		}
+	});
+	
+	$("#readCardBtn").click(function(){
+		readCard();	
+	});
+	
+	
+	$(document).on("click",	"input[type='button'][name='deleteCard']",function() {
+		var deleteCardID = $(this).attr("id");
+		console.info("delete RFID card cardID="+deleteCardID);
+		deleteCard(deleteCardID);
+	});
+	
+});
+
+
+
+function readCard(){
+	console.log("读取RFID卡号readCard");
+	$.ajax({
+		type : "post",
+		dataType : "json",
+		url : '<%=REQUEST_URI%>',
+		data : {
+			act : "readCard"					
+		},
+		error : function(xhr, status, e) {
+			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+			console.log(xhr.responseText);
+			alert("读卡失败");
+		},
+		beforeSend : function() {
+			openWaitBox();
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+			closeWaitBox();
+		},
+		success : function(result) {
+			if(result.result){
+				var cardID = result.cardID;
+				$("#addCardID").val(cardID);
+			}else{
+				alert(result.msg);
+			}
+		}
+	});
+}
+
+function saveCard(addCardID,addCardUsername){
+	console.log("新增RFID卡addRFIDCard");
+	$.ajax({
+		type : "post",
+		dataType : "json",
+		url : '<%=REQUEST_URI%>',
+		data : {
+			act : "saveCard",
+			addCardID:addCardID,
+			addCardUsername:addCardUsername			
+		},
+		error : function(xhr, status, e) {
+			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+			console.log(xhr.responseText);
+			alert("开卡失败");
+		},
+		beforeSend : function() {
+			openWaitBox();
+		},
+		complete : function(XMLHttpRequest, textStatus) {
+			closeWaitBox();
+		},
+		success : function(result) {
+			alert(result.msg);
+			if(result.result){
+				//重新查询卡片集合
+				var RFIDWorkMode = $("input[type='radio'][name='RFIDWorkMode']:checked").val();
+				RFIDModeInit(RFIDWorkMode);
+			}
+		}
+	});
+}
+
+
+
+
+
+
+
+
+
+//-----------------------------------RFID卡管理--------------------------------------------
+
+</script>
+
+<%+footer%>
