@@ -1,209 +1,114 @@
-<%
+<#assign base=rc.contextPath>
+<!DOCTYPE html>
+<html lang="cn">
+	<head>
+		<!-- Required meta tags always come first -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
 
-local nixio = require "nixio"
-local brxydispatcher = require "luci.tools.brxydispatcher"
-local table = require "table"
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="${base}/bootstrap/css/bootstrap.min.css" type="text/css">
+	</head>
+	<body style="padding-top: 70px;">
+		<input type="hidden" id="baseUrl" value="${base}" />
 
+		<div class="navbar-wrapper">
+			<div class="container">
 
-local h = require "luci.http"
+				<nav class="navbar navbar-default navbar-fixed-top">
+					<div class="container">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="#">School Server</a>
+						</div>
+						<div id="navbar" class="navbar-collapse collapse">
+							<ul class="nav navbar-nav">
+								<li class="active">
+									<a href="#">Home</a>
+								</li>
+								<li>
+									<a href="#about">About</a>
+								</li>
+								<li>
+									<a href="#contact">Contact</a>
+								</li>
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#">Action</a>
+										</li>
+										<li>
+											<a href="#">Another action</a>
+										</li>
+										<li>
+											<a href="#">Something else here</a>
+										</li>
+										<li role="separator" class="divider"> </li>
+										<li class="dropdown-header">
+											Nav header
+										</li>
+										<li>
+											<a href="#">Separated link</a>
+										</li>
+										<li>
+											<a href="#">One more separated link</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
 
+			</div><!--  /.container -->
+		</div><!--	/.	navbar-wrapper-->
 
+		<div class="container">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">添加设备</h3>
+				</div>
+				<!--<div class="panel-body">-->
+					<table class="table">				
+						<tr>
+							<td>设备ID</td>
+							<td>版本</td>		
+							<td>名称</td>				
+							<td>操作</td>
+						</tr>
+						<tbody id="deviceListBody">
+							
+						</tbody>
+					</table>
+				<!--</div>-->
+			</div>
 	
-if h.formvalue('act') == 'getRFIDConfig' then
-	h.prepare_content("application/json")
-	local data = brxydispatcher.getRFIDConfig()
-	h.write_json({data=data})
-	return
-
-	
-elseif h.formvalue('act') == 'saveCard' then
-	h.prepare_content("application/json")
-	local addCardID = h.formvalue('addCardID')	
-	local addCardUsername = h.formvalue('addCardUsername')
-	local re,msg = brxydispatcher.saveCard(addCardID,addCardUsername)
-	h.write_json({result=re, msg=msg})
-	return
-	
-	
-elseif h.formvalue('act') == 'readCard' then
-	h.prepare_content("application/json")
-	local re,msg,cardID = brxydispatcher.readCard()
-	h.write_json({result=re, msg=msg,cardID=cardID})
-	return
-	
-elseif h.formvalue('act') == 'activeDevice' then
-	h.prepare_content("application/json")
-	local activeDeviceID = h.formvalue('activeDeviceID')	
-	local re,msg = brxydispatcher.activeDevice(activeDeviceID)
-	h.write_json({result=re, msg=msg})
-	return
-	
-elseif h.formvalue('act') == 'queryUnActiveDevice' then
-	h.prepare_content("application/json")	
-	local data = brxydispatcher.queryUnActiveDevice()
-	h.write_json({data=data})
-	return
-	
-elseif h.formvalue('act') == 'saveRFIDConfig' then
-	h.prepare_content("application/json")	
-	local RFIDWorkMode = h.formvalue('RFIDWorkMode')	
-	local RFIDWorkTime = h.formvalue('RFIDWorkTime')
-	
-	local re,msg = brxydispatcher.saveRFIDConfig(RFIDWorkMode,RFIDWorkTime)
-	h.write_json({result=re, msg=msg})
-	return
-	
-end
-
-%>
-
-
-<%+header%>
-
-<input type="hidden" id="baseUrl" value="<%=resource%>" />
-<input type="hidden" id="loginUrl" value="<%=luci.dispatcher.build_url()%>" />
-
-<form id="aioConfigForm">
-
-	<div class="cbi-map" id="cbi-unitmachine">
 		
-		
-		<fieldset id="deviceList">
-			<legend>
-				未激活设备管理
-			</legend>
-			<table>				
-				<tr>
-					<td>设备ID</td>
-					<td>版本</td>		
-					<td>名称</td>				
-					<td>操作</td>
-				</tr>
-				<tbody id="deviceListBody">
-					
-				</tbody>
-			</table>
-		</fieldset>
-		
-	</div>
-
 	
-</form>
-<script type="text/javascript" src="<%=resource%>/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<%=resource%>/jquery.validate.min.js"></script>
-<script type="text/javascript" src="<%=resource%>/brxyTool.js"></script>
-<script type="text/javascript">
+			<!-- FOOTER -->
+			<footer>
+				<p class="pull-right">
+					<a href="#">返回顶部</a>
+				</p>
+				<p>
+					&copy;  <a href="www.brxy-edu.com">四川博瑞星云信息技术有限公司</a> &middot; <a href="www.brxy-cloud.com">博瑞星云云平台</a> 2014-2016 版权所有 
+				</p>
+			</footer>
 
-
-
-
-
-
-
-
-
-
-
-//+++++++++++++++++++++++++++++++++RFID卡管理+++++++++++++++++++++++++++++++++++++++++
-$(function(){
-
-	queryUnActiveDevice();
+		</div><!-- /.container -->
+	</body>
 	
-	
-	$(document).on("click",	"input[type='button'][name='activeDevice']",function() {
-		var activeDeviceID = $(this).attr("id");
-		console.info("active the device ID="+activeDeviceID);
-		activeDevice(activeDeviceID);
-	});
-	
-});
-
-
-
-
-
-
-
-function queryUnActiveDevice(){
-	console.log("luci page queryUnActiveDevice ");
-	$.ajax({
-		type : "post",
-		dataType : "json",
-		url : '<%=REQUEST_URI%>',
-		data : {
-			act : "queryUnActiveDevice"
-		},
-		error : function(xhr, status, e) {
-			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
-			console.log(xhr.responseText);
-			alert("queryUnActiveDevice数据失败");
-		},
-		beforeSend : function() {
-			openWaitBox();
-		},
-		complete : function(XMLHttpRequest, textStatus) {
-			closeWaitBox();
-		},
-		success : function(result) {
-			deviceListInit(result.data);
-		}
-	});
-
-}
-
-function deviceListInit(data){
-	console.info("deviceListInit 初始化数据到页面");
-	var html = "";
-	for ( var i in data) {
-		var device = data[i];
-		html += "<tr><td>" + device.deviceID + "</td><td>" + device.firmversion
-				+"<td>" + device.deviceName
-				+ "</td><td><input type='button' name='activeDevice' id="
-				+ device.deviceID
-				+ " value='激活' class='cbi-button cbi-button-add'></td></tr>";
-	}
-	if(html==""){
-		html = "<tr><td colspan='4'>暂无数据</td></tr>";
-	}
-	$("#deviceListBody").html(html);
-}
-
-
-
-
-
-function activeDevice(activeDeviceID){
-	console.log("activeDevice");
-	$.ajax({
-		type : "post",
-		dataType : "json",
-		url : '<%=REQUEST_URI%>',
-		data : {
-			act : "activeDevice",
-			activeDeviceID:activeDeviceID			
-		},
-		error : function(xhr, status, e) {
-			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
-			console.log(xhr.responseText);
-			alert("激活失败");
-		},
-		beforeSend : function() {
-			openWaitBox();
-		},
-		complete : function(XMLHttpRequest, textStatus) {
-			closeWaitBox();
-		},
-		success : function(result) {
-			alert(result.msg);
-			if(result.result){
-				
-			}
-		}
-	});
-}
-
-//-----------------------------------RFID卡管理--------------------------------------------
-
-</script>
-
-<%+footer%>
+	<!-- jQuery first, then Bootstrap JS. -->
+	<script type="text/javascript" src="${base}/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${base}/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="${base}/jquery/jquery.validate.min.js"></script>
+	<script type="text/javascript" src="${base}/brxyTool.js"></script>
+	<script type="text/javascript" src="${base}/js/addDevice.js"></script>
+</html>

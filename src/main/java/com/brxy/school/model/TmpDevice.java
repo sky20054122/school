@@ -123,6 +123,14 @@ public class TmpDevice implements Serializable {
 		this.deviceName = deviceName;
 		this.firmversion = firmversion;
 	}
+
+	public TmpDevice(Long id, String deviceID, String deviceName, Firmversion firmversion) {
+		super();
+		this.id = id;
+		this.deviceID = deviceID;
+		this.deviceName = deviceName;
+		this.firmversion = firmversion;
+	}
 	
 	
 	
