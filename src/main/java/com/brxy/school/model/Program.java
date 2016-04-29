@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 上传文件 包装称节目
@@ -35,6 +36,12 @@ public class Program implements Serializable {
 	
 	@Column(name="NAME")
 	private String name;
+	
+	/**
+	 * 文件的md5值 ，在文件系统中作为文件的名称  例如 md5.mp3
+	 */
+	@Column(name="MD5")
+	private String md5;
 	
 	@Column(name="DURATION")
 	private String duration;
@@ -95,6 +102,7 @@ public class Program implements Serializable {
 		this.comment = comment;
 	}
 
+	@JsonIgnore
 	public Set<Schedule> getSchedules() {
 		return schedules;
 	}
@@ -102,12 +110,47 @@ public class Program implements Serializable {
 	public void setSchedules(Set<Schedule> schedules) {
 		this.schedules = schedules;
 	}
+	
+	
+
+	public String getMd5() {
+		return md5;
+	}
+
+
+	public void setMd5(String md5) {
+		this.md5 = md5;
+	}
+
 
 	@Override
 	public String toString() {
 		return "Program [id=" + id + ", name=" + name + ", duration=" + duration + ", recordDate=" + recordDate
 				+ ", comment=" + comment + "]";
 	}
+
+	
+
+	public Program(String name, String duration, Date recordDate, String comment) {
+		super();
+		this.name = name;
+		this.duration = duration;
+		this.recordDate = recordDate;
+		this.comment = comment;
+	}
+
+
+	public Program(Long id, String name, String duration, Date recordDate, String comment) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.duration = duration;
+		this.recordDate = recordDate;
+		this.comment = comment;
+	}
+
+
+	
 	
 	
 	

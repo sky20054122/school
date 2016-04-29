@@ -6,8 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -21,11 +19,8 @@ public class TmpDevice implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="ID")
-	private Long id;
 	
+	@Id
 	@Column(name="DEVICE_ID",nullable=false,unique=true)
 	private String deviceID;
 	
@@ -36,15 +31,6 @@ public class TmpDevice implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Firmversion firmversion;
 
-	
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getDeviceID() {
 		return deviceID;
@@ -72,9 +58,11 @@ public class TmpDevice implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TmpDevice [id=" + id + ", deviceID=" + deviceID + ", deviceName=" + deviceName + ", firmversion="
+		return "TmpDevice [deviceID=" + deviceID + ", deviceName=" + deviceName + ", firmversion="
 				+ firmversion + "]";
 	}
+
+
 
 	@Override
 	public int hashCode() {
@@ -83,7 +71,6 @@ public class TmpDevice implements Serializable {
 		result = prime * result + ((deviceID == null) ? 0 : deviceID.hashCode());
 		result = prime * result + ((deviceName == null) ? 0 : deviceName.hashCode());
 		result = prime * result + ((firmversion == null) ? 0 : firmversion.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -108,8 +95,6 @@ public class TmpDevice implements Serializable {
 			return false;
 		if (firmversion != other.firmversion)
 			return false;
-		if (id != other.id)
-			return false;
 		return true;
 	}
 
@@ -124,13 +109,6 @@ public class TmpDevice implements Serializable {
 		this.firmversion = firmversion;
 	}
 
-	public TmpDevice(Long id, String deviceID, String deviceName, Firmversion firmversion) {
-		super();
-		this.id = id;
-		this.deviceID = deviceID;
-		this.deviceName = deviceName;
-		this.firmversion = firmversion;
-	}
 	
 	
 	

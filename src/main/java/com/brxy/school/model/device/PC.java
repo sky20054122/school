@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 
@@ -10,22 +10,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * 每个开关面板上的某一个具体的开关
+ * 内置PC
  * 
  * @author brxy
  *
  */
 
 @Entity
-@Table(name =CommonConstants.TABLE_PREFIX+ "childswitch")
-public class ChildSwitch implements Serializable {
+@Table(name =CommonConstants.TABLE_PREFIX+ "pc")
+public class PC implements Serializable {
 
 	/**
 	 * 
@@ -44,11 +46,11 @@ public class ChildSwitch implements Serializable {
 	@Column(name = "STATUS")
 	private DeviceStatus status;
 
-	@ManyToOne
-	@JoinColumn(name = "FK_PANEL_SWITCH_ID")
-	private PanelSwitch panelSwitch;
+	@OneToOne
+	@JoinColumn(name = "FK_DEVICE_ID", insertable = true, unique = true)
+	private Device device;
 
-	public ChildSwitch() {
+	public PC() {
 		super();
 	}
 
@@ -76,17 +78,25 @@ public class ChildSwitch implements Serializable {
 		this.status = status;
 	}
 
-	public PanelSwitch getPanelSwitch() {
-		return panelSwitch;
+	@JsonIgnore
+	public Device getDevice() {
+		return device;
 	}
 
-	public void setPanelSwitch(PanelSwitch panelSwitch) {
-		this.panelSwitch = panelSwitch;
+	public void setDevice(Device device) {
+		this.device = device;
 	}
 
-	@Override
-	public String toString() {
-		return "ChildSwitch [id=" + id + ", identify=" + identify + ", status=" + status + "]";
+
+	public PC(String identify, DeviceStatus status, Device device) {
+		super();
+		this.identify = identify;
+		this.status = status;
+		this.device = device;
 	}
+	
+	
+	
+	
 
 }

@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -17,6 +17,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 一个开关面板  上面有两个开关按钮  ，后期也可能三个 四个按钮，所以设计成集合
@@ -28,9 +30,6 @@ import com.brxy.school.common.CommonConstants;
 @Table(name=CommonConstants.TABLE_PREFIX+"panelswitch")
 public class PanelSwitch implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -44,6 +43,18 @@ public class PanelSwitch implements Serializable{
 	@ManyToOne
 	@JoinColumn(name="FK_DEIVCE_ID")
 	private Device device;
+	
+	/**
+	 * 开关面板的名称
+	 */
+	@Column(name="NAME")
+	private String name;
+	
+	/**
+	 * 每个开关面板的mac地址
+	 */
+	@Column(name="MAC")
+	private String mac;
 
 	
 
@@ -63,12 +74,32 @@ public class PanelSwitch implements Serializable{
 		this.child = child;
 	}
 
+	@JsonIgnore
 	public Device getDevice() {
 		return device;
 	}
 
 	public void setDevice(Device device) {
 		this.device = device;
+	}
+	
+	
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMac() {
+		return mac;
+	}
+
+	public void setMac(String mac) {
+		this.mac = mac;
 	}
 
 	public PanelSwitch() {
@@ -77,8 +108,26 @@ public class PanelSwitch implements Serializable{
 
 	@Override
 	public String toString() {
-		return "PanelSwitch [id=" + id + ", child=" + child + "]";
+		return "PanelSwitch [child=" + child + ", name=" + name + ", mac=" + mac + "]";
 	}
+	
+	
+
+	public PanelSwitch(Set<ChildSwitch> child, Device device) {
+		super();
+		this.child = child;
+		this.device = device;
+	}
+
+	public PanelSwitch(Set<ChildSwitch> child, Device device, String name, String mac) {
+		super();
+		this.child = child;
+		this.device = device;
+		this.name = name;
+		this.mac = mac;
+	}
+	
+	
 	
 	
 	

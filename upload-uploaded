@@ -1,0 +1,21 @@
+
+
+use mp;
+
+
+CREATE TABLE `resouce_area` (
+  `resource_id` bigint(20) NOT NULL,
+  `area_id` bigint(20) NOT NULL,
+  status int,
+  `fileType` int(11) DEFAULT NULL,
+  PRIMARY KEY (`area_id`,`resource_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+select * from resouce_area where status = 3;
+
+
+select resource_id from(select *,count(*) as c from resouce_area as ra where ra.area_id in (2,3)and ra.status = 3 and ra.fileType = 1 group by resource_id) as a where a.c = 2;
+
+select resource_id from(select *,count(*) as c from resouce_area as ra where ra.area_id in (3,9,8)and ra.status =3 and ra.fileType = 1 group by resource_id) as a  where a.c = 3

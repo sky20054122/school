@@ -1,4 +1,4 @@
-package com.brxy.school.service;
+package com.brxy.school.service.impl;
 
 import java.util.List;
 
@@ -17,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.brxy.school.model.User;
 import com.brxy.school.repository.UserRepository;
+import com.brxy.school.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired

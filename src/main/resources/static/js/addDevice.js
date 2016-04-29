@@ -8,9 +8,13 @@ var baseUrl = $("#baseUrl").val();
 
 $(function(){
 	baseUrl = $("#baseUrl").val();
+	
+	
+	//查询未激活设备列表
 	queryUnActiveDevice();
 	
 	
+	//激活设备按钮事件
 	$(document).on("click",	"input[type='button'][name='activeDevice']",function() {
 		var activeDeviceID = $(this).attr("id");
 		console.info("active the device ID="+activeDeviceID);
@@ -78,10 +82,10 @@ function activeDevice(activeDeviceID){
 	$.ajax({
 		type : "post",
 		dataType : "json",
-		url : '<%=REQUEST_URI%>',
+		url : baseUrl+'/tmpDevice/active',
 		data : {
 			act : "activeDevice",
-			activeDeviceID:activeDeviceID			
+			deviceID:activeDeviceID			
 		},
 		error : function(xhr, status, e) {
 			console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
@@ -95,9 +99,9 @@ function activeDevice(activeDeviceID){
 			closeWaitBox();
 		},
 		success : function(result) {
-			alert(result.msg);
+			alert(result.message);
 			if(result.result){
-				
+				queryUnActiveDevice();
 			}
 		}
 	});

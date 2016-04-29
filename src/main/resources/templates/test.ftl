@@ -3,7 +3,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>BRXY School Server</title>
+		<title>Insert title here</title>
 		<script src="/jquery/jquery.min.js" type="text/javascript"></script>
 		<script>
 			$(document).ready(function() {
@@ -20,27 +20,24 @@
 		
 		<div id="header"> </div>
 		<div class="container">
-			
-			
-			
 			<div class="panel panel-info">
 				<div class="panel-heading">
 					<h3 class="panel-title">添加设备</h3>
 				</div>
 				<!--<div class="panel-body">-->
-					<table class="table">				
-						<tr>
-							<td>设备ID</td>
-							<td>版本</td>		
-							<td>名称</td>				
-							<td>操作</td>
-						</tr>
-						<tbody id="deviceListBody">
-							
-						</tbody>
-					</table>
+				<table class="table">
+					<tr>
+						<td>设备ID</td>
+						<td>版本</td>
+						<td>名称</td>
+						<td>操作</td>
+					</tr>
+					<tbody id="deviceListBody">
+
+					</tbody>
+				</table>
 				<!--</div>-->
-			</div><!--	panel panel-info-->
+			</div>
 
 			<div id="footer"> </div>
 		</div><!-- /.container -->

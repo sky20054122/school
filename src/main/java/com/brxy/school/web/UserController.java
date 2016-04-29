@@ -19,4 +19,11 @@ public class UserController {
 		model.put("message", this.message);
 		return "welcome";
 	}
+	
+	@RequestMapping("/test")
+	public String test(Map<String, Object> model) {
+		model.put("time", new Date());
+		model.put("message", this.message);
+		return "test";
+	}
 }

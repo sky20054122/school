@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 
@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name =CommonConstants.TABLE_PREFIX+ "mediaurl")
@@ -66,11 +68,21 @@ public class MediaURL implements Serializable {
 		this.mediaB = mediaB;
 	}
 
+	@JsonIgnore
 	public Device getDevice() {
 		return device;
 	}
 
 	public void setDevice(Device device) {
+		this.device = device;
+	}
+	
+	
+
+	public MediaURL(String mediaA, String mediaB,Device device) {
+		super();
+		this.mediaA = mediaA;
+		this.mediaB = mediaB;
 		this.device = device;
 	}
 

@@ -1,16 +1,18 @@
 package com.brxy.school.web;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.brxy.school.common.Firmversion;
 import com.brxy.school.model.TmpDevice;
+import com.brxy.school.service.TmpDeviceService;
 
 /**
 *
@@ -24,6 +26,9 @@ public class TmpDeviceOntroller {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TmpDeviceOntroller.class);
 	
+	@Autowired
+	private TmpDeviceService tmpDeviceService;
+	
 	@RequestMapping(value="/main")
 	public String getTmpDeviceMain(){
 		
@@ -31,17 +36,18 @@ public class TmpDeviceOntroller {
 		return "addDevice";
 	}
 	
-	@RequestMapping(value="/list")
 	@ResponseBody
+	@RequestMapping(value="/list")
 	public List<TmpDevice> getTmpDeviceList(){
-		
 		logger.info("getTmpDeviceList");
+		return this.tmpDeviceService.findAll();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/active")
+	public Map<String,Object> activeTmpDevice(@RequestParam("deviceID")String deviceID){
 		
-		List<TmpDevice> lists = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			TmpDevice t = new TmpDevice((long) i, "deviceID"+i, "deviceName"+i, Firmversion.DTSK3);
-			lists.add(t);
-		}
-		return lists;
+		logger.info("activeTmpDevice");
+		return this.tmpDeviceService.actviveTmpDevice(deviceID);
 	}
 }

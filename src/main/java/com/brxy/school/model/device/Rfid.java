@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 
@@ -15,17 +15,12 @@ import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
-
-/**
- * 内置PC
- * 
- * @author brxy
- *
- */
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name =CommonConstants.TABLE_PREFIX+ "pc")
-public class PC implements Serializable {
+@Table(name=CommonConstants.TABLE_PREFIX+"dtsrfid")
+public class Rfid implements Serializable{
 
 	/**
 	 * 
@@ -33,24 +28,22 @@ public class PC implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="ID")
 	private Long id;
 
-	@Column(name = "IDENTIFY")
+	@Column(name="IDENTIFY")
 	private String identify;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "STATUS")
+	@Column(name="STATUS")
 	private DeviceStatus status;
-
+	
 	@OneToOne
-	@JoinColumn(name = "FK_DEVICE_ID", insertable = true, unique = true)
+	@JoinColumn(name="FK_DEVICE_ID",insertable=true,unique=true)
 	private Device device;
 
-	public PC() {
-		super();
-	}
+	
 
 	public Long getId() {
 		return id;
@@ -76,6 +69,7 @@ public class PC implements Serializable {
 		this.status = status;
 	}
 
+	@JsonIgnore
 	public Device getDevice() {
 		return device;
 	}
@@ -84,4 +78,25 @@ public class PC implements Serializable {
 		this.device = device;
 	}
 
+	public Rfid() {
+		super();
+	}
+	
+	
+
+	
+	public Rfid(String identify, DeviceStatus status, Device device) {
+		super();
+		this.identify = identify;
+		this.status = status;
+		this.device = device;
+	}
+
+	@Override
+	public String toString() {
+		return "Rfid [id=" + id + ", identify=" + identify + ", status=" + status + "]";
+	}
+	
+	
+	
 }

@@ -9,8 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -20,6 +18,15 @@ import javax.persistence.Table;
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
 import com.brxy.school.common.Firmversion;
+import com.brxy.school.model.device.Booth;
+import com.brxy.school.model.device.Displayer;
+import com.brxy.school.model.device.MediaURL;
+import com.brxy.school.model.device.PC;
+import com.brxy.school.model.device.PanelSwitch;
+import com.brxy.school.model.device.Rfid;
+import com.brxy.school.model.device.Screen;
+import com.brxy.school.model.device.Sensor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name =CommonConstants.TABLE_PREFIX+ "device")
@@ -27,11 +34,10 @@ public class Device implements Serializable {
 
 	private static final long serialVersionUID = -8082389533433108578L;
 
+	/**
+	 * 设备编码作为主键
+	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Long id;
-
 	@Column(name = "DEVICE_ID", unique = true, nullable = false)
 	private String deviceId;
 
@@ -57,7 +63,7 @@ public class Device implements Serializable {
 	private Booth booth;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "device", cascade = CascadeType.ALL, optional = true)
-	private Displayer diplayer;
+	private Displayer displayer;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "device", cascade = CascadeType.ALL, optional = true)
 	private Sensor sensor;
@@ -90,13 +96,7 @@ public class Device implements Serializable {
 		super();
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getDeviceId() {
 		return deviceId;
@@ -163,11 +163,11 @@ public class Device implements Serializable {
 	}
 
 	public Displayer getDiplayer() {
-		return diplayer;
+		return displayer;
 	}
 
-	public void setDiplayer(Displayer diplayer) {
-		this.diplayer = diplayer;
+	public void setDisplayer(Displayer displayer) {
+		this.displayer = displayer;
 	}
 
 	public Sensor getSensor() {
@@ -218,6 +218,7 @@ public class Device implements Serializable {
 		this.channel = channel;
 	}
 
+	@JsonIgnore
 	public Set<Card> getCards() {
 		return cards;
 	}
@@ -260,11 +261,25 @@ public class Device implements Serializable {
 		return true;
 	}
 
+	
+	
+	public Device(String deviceId, String deviceName, Firmversion firmversion, DeviceStatus deviceStatus,
+			Date recordDate) {
+		super();
+		this.deviceId = deviceId;
+		this.deviceName = deviceName;
+		this.firmversion = firmversion;
+		this.deviceStatus = deviceStatus;
+		this.recordDate = recordDate;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Device [id=" + id + ", deviceId=" + deviceId + ", deviceName=" + deviceName + ", firmversion="
+		return "Device [deviceId=" + deviceId + ", deviceName=" + deviceName + ", firmversion="
 				+ firmversion + ", deviceStatus=" + deviceStatus + ", recordDate=" + recordDate + ", mediaURL="
-				+ mediaURL + ", pc=" + pc + ", booth=" + booth + ", diplayer=" + diplayer + ", sensor=" + sensor
+				+ mediaURL + ", pc=" + pc + ", booth=" + booth + ", diplayer=" + displayer + ", sensor=" + sensor
 				+ ", rfid=" + rfid + ", dtsSwitches=" + dtsSwitches + ", screen=" + screen + ", volume=" + volume
 				+ ", channel=" + channel + "]";
 	}

@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 
@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name=CommonConstants.TABLE_PREFIX+"sensor")
@@ -98,6 +100,7 @@ public class Sensor implements Serializable{
 		this.illumination = illumination;
 	}
 
+	@JsonIgnore
 	public Device getDevice() {
 		return device;
 	}
@@ -106,6 +109,19 @@ public class Sensor implements Serializable{
 		this.device = device;
 	}
 
+	
+	
+
+	public Sensor(String identify, DeviceStatus status, int temperature, int humidness, int illumination,
+			Device device) {
+		super();
+		this.identify = identify;
+		this.status = status;
+		this.temperature = temperature;
+		this.humidness = humidness;
+		this.illumination = illumination;
+		this.device = device;
+	}
 
 	public Sensor() {
 		super();

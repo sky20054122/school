@@ -1,4 +1,4 @@
-package com.brxy.school.model;
+package com.brxy.school.model.device;
 
 import java.io.Serializable;
 
@@ -15,11 +15,19 @@ import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
+import com.brxy.school.model.Device;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * 展台
+ * @author brxy
+ *
+ */
 
 @Entity
-@Table(name=CommonConstants.TABLE_PREFIX+"dtsrfid")
-public class Rfid implements Serializable{
-
+@Table(name=CommonConstants.TABLE_PREFIX+"booth")
+public class Booth implements Serializable{
+	
 	/**
 	 * 
 	 */
@@ -41,15 +49,23 @@ public class Rfid implements Serializable{
 	@JoinColumn(name="FK_DEVICE_ID",insertable=true,unique=true)
 	private Device device;
 
+	public Booth() {
+		super();
+	}
+
 	
 
 	public Long getId() {
 		return id;
 	}
 
+
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public String getIdentify() {
 		return identify;
@@ -67,6 +83,7 @@ public class Rfid implements Serializable{
 		this.status = status;
 	}
 
+	@JsonIgnore
 	public Device getDevice() {
 		return device;
 	}
@@ -75,15 +92,10 @@ public class Rfid implements Serializable{
 		this.device = device;
 	}
 
-	public Rfid() {
-		super();
-	}
-
 	@Override
 	public String toString() {
-		return "Rfid [id=" + id + ", identify=" + identify + ", status=" + status + "]";
+		return "Booth [id=" + id + ", identify=" + identify + ", status=" + status + "]";
 	}
-	
 	
 	
 }
