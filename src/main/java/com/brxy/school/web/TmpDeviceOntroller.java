@@ -1,5 +1,6 @@
 package com.brxy.school.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,9 +39,12 @@ public class TmpDeviceOntroller {
 	
 	@ResponseBody
 	@RequestMapping(value="/list")
-	public List<TmpDevice> getTmpDeviceList(){
+	public Map<String,Object> getTmpDeviceList(){
 		logger.info("getTmpDeviceList");
-		return this.tmpDeviceService.findAll();
+		List<TmpDevice> list = this.tmpDeviceService.findAll();
+		Map<String,Object> result = new HashMap<>();
+		result.put("data", list);
+		return result;
 	}
 	
 	@ResponseBody
