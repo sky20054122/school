@@ -2,22 +2,23 @@
 
 $(function(){
 	
-	var bar = $('.bar');
-	var percent = $('.percent');
-	var status = $('#status');
+	var bar = $('#uploadProgress');
+	var percent = $('#uploadProgress span');
 	   
+	
 	$('form').ajaxForm({
+		 
 		dataType:'json',
 	    beforeSend: function() {
-	        status.empty();
 	        var percentVal = '0%';
 	        bar.width(percentVal)
-	        percent.html(percentVal);
+	        percent.html("上传进度: "+percentVal);
+	        $("#status").html("上传文件");
 	    },
 	    uploadProgress: function(event, position, total, percentComplete) {
 	        var percentVal = percentComplete + '%';
 	        bar.width(percentVal)
-	        percent.html(percentVal);
+	        percent.html("上传进度: "+percentVal);
 	    },
 	    success: function(data) {
 	    	console.log(data)
@@ -25,11 +26,11 @@ $(function(){
 	    	if(data.result){
 	    		//$('#uploadForm').resetForm();
 	    		//queryProgramList();
-	    		window.location.reload(true);
+    			window.location.reload(true);
 	    	}
 	        var percentVal = '100%';
 	        bar.width(percentVal)
-	        percent.html(percentVal);
+	        percent.html("上传进度: "+percentVal);
 	    },
 		complete: function(xhr) {
 			//status.html(xhr.responseText);
@@ -37,16 +38,54 @@ $(function(){
 	}); 
 	
 	$('#file').change(function(){
-	    var file = this.files[0];
-	    name = file.name;
-	    size = file.size;
-	    type = file.type;
-	    //your validation
-	    console.log("name="+name+" size="+size+" type="+type);
+		var file = this.files[0];
+	    name = file.name; //文件名称
+	    size = file.size;  //文件大小
+	    type = file.type; // audio/mpeg  判断音频格式是不是MP3
+	    if(type&&type!=""){
+	    	if(type=="audio/mpeg"||type=="audio/mp3"){
+			    var fileExtension = getFileExtension(name);
+			    if(fileExtension&&fileExtension==".mp3"){
+			    	$("#fileExtension").val(fileExtension);
+			    	$("#fileSize").val(size);
+			    	var reader = new FileReader();
+	                 reader.onload=function(){
+	                 	$("#preview").html("<audio style='width:100%;' id='myAudio' src='"+this.result+"' autoplay='autoplay' controls='controls'>Your browser does not support the audio tag.</audio>");
+				    		Media = document.getElementById("myAudio"); //返回文件时长 单位秒
+				    		Media.oncanplay=function(){
+						    	var duration = Math.ceil(Media.duration); 
+						    	$("#duration").val(duration);
+							    console.log("name="+name+" size="+size+" type="+type+" fileExtension="+fileExtension+" duration="+duration);
+				    		};
+	                 };
+	                reader.readAsDataURL(file);
+	                $("#status").html("计算文件MD5");
+	                Md5File(file, "status", function(md5){
+	                	$("#fileMD5").val(md5);
+	                	
+	                	$("#uploadBtn").show();
+	                });
+			    }else{
+			    	alert("文件 后缀不是 .mp3  fileExtension="+fileExtension);
+			    }
+	    		
+	    	}else{
+	    		alert("文件 MIME类型不是 audio/mpeg或 audio/mp3  type="+type);
+	    	}
+	    }else{
+	    	alert("unknown file MIME type");
+	    	
+	    }
 	});
 	
 	
-	
+	/**
+	 * 根据文件名称获取文件的后缀  包含.
+	 */
+	function getFileExtension(fileName){
+		var fileExtension = fileName.substring(fileName.lastIndexOf('.') ).toLowerCase(); //包含.  .mp3  
+		return fileExtension;
+	}
 	
 });
 

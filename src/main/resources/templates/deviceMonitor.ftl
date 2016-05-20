@@ -1,239 +1,189 @@
-<#assign base=rc.contextPath>
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<title>设备监控</title>
-		<script src="/jquery/jquery.min.js" type="text/javascript"></script>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>博瑞星云 | 校园服务器</title>
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<!-- Bootstrap 3.3.6 -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/bootstrap/css/bootstrap.min.css">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/Font-Awesome/css/font-awesome.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/ionicons/css/ionicons.min.css">
+		<!-- DataTables -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/datatables/dataTables.bootstrap.css">
+		<!--link rel="stylesheet" href="${rc.contextPath}/plugins/datatables/jquery.dataTables.css"影响和adminLTE的整合效果-->
+		<!-- Theme style -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/adminlte/css/AdminLTE.css">
+		<!-- AdminLTE Skins. Choose a skin from the css/skins
+		folder instead of downloading all of them to reduce the load. -->
+		<link rel="stylesheet" href="${rc.contextPath}/plugins/adminlte/css/skins/_all-skins.min.css">
+		<link rel="stylesheet" href="${rc.contextPath}/css/style.css">
+		
+		<!-- jQuery-->
+		<script src="${rc.contextPath}/plugins/jQuery/jquery.min.js"></script>
 		<script>
 			$(document).ready(function() {
-				$("#header").load("/header.html",function(){
+				$("#header").load("${rc.contextPath}/layout/header.html", function() {
 					$("#deviceLi").addClass("active");
 				});
-				$("#footer").load("/footer.html");
+				$("#footer").load("${rc.contextPath}/layout/footer.html");
+				//var baseUrl = $("#baseUrl").val();
 				
 			});
 		</script>
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" type="text/css" href="${base}/jquery-ui/jquery-ui.min.css">
-		<link rel="stylesheet" type="text/css" href="${base}/bootstrap/css/bootstrap.min.css" >
-		<link rel="stylesheet" type="text/css" href="${base}/bootstrap/bootstrap-switch/bootstrap-switch.min.css">
-<style type="text/css">
-	
-	
-	.btn-sm{
-		font-size: 12px !important;
-	}
-	.interval{
-		margin-right: 5px;
-	}
-	
-	.online{
-		color: black;
-	}
-	
-	.offline{
-		color:#b4CDCD;
-	}
-	
-	.tdRight{
-		text-align: right;
-	}
-	
-	.tdLeft{
-		text-align: left;
-	}
-	
-	.center{
-		text-align: center;
-	}
-	.remInput{
-		width:10rem;
-	}
-</style>
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<style type="text/css">
+			.box-right-controll{
+				text-align: right;padding-bottom: 0;
+			}
+		</style>
 	</head>
-	<body style="padding-top: 70px;">
-		<input type="hidden" id="baseUrl" value="${base}" />
-		
-		<div id="header"> </div>
-		<div class="container">
-			
-			<div id="tabs">
-			<ul>
-				<li><a href="#deviceMonitorPanel">设备监控</a></li>
-				<li><a href="#deviceDetailPanel"><span id="deviceDetailTabTitle"> </span></a></li>
-			</ul>
-			<div id="deviceMonitorPanel">
-				<table class="table">
-					<tr>
-						<td colspan="6" class="tdRight">
-							<input type="text" id="queryDeviceName" placeholder="设备名称" class="remInput">&nbsp;&nbsp;
-							<input type="text" id="queryDeviceID" placeholder="设备编码" class="remInput">&nbsp;&nbsp;
-							<select id="queryDeviceVersion">
-								<option value="ALL">全部版本</option>
-								<option value="DTSK3A">DTSK3</option>
-								<option value="DTSK3A">DTSK3A</option>
-							</select>&nbsp;&nbsp;
-							<!-- <input type="text" id="queryDeviceVersion" placeholder="设备版本" class="remInput"> -->
-							<select id="queryDeviceStatus">
-								<option value="ALL">全部状态</option>
-								<option value="ONLINE">在线</option>
-								<option value="OFFLINE">离线</option>
-							</select>&nbsp;&nbsp;
-							<!-- <input type="text" id="queryDeviceStatus" placeholder="设备状态" class="remInput">&nbsp;&nbsp; -->
-							<input type="button" id="queryBtn" value="查询" class="btn btn-info btn-sm">
-						</td>
-					</tr>
-					<tr>
-						<td>选择</td>					
-						<td>设备名称</td>
-						<td>设备编号</td>
-						<td>设备版本</td>
-						<td>设备状态</td>
-						<td>操作</td>
-					</tr>
-					<tbody id="deviceListBody">
-	
-					</tbody>
-				</table>
-				<table class="table"> 
-					<tr>
-						<td class="tdRight">
-							<input type="button" value="开机" class="btn btn-info" id="startDevice" >
-							<input type="button" value="关机" class="btn btn-info" id="shutdownDevice" >
-							<input type="button" value="广播" class="btn btn-info" id="boardcastBtn" >
-						</td>
-					</tr>
-				</table>
-			</div><!-- deviceMonitorPanel-->
-			
-			<div id="deviceDetailPanel">
-				<table class="table">
-					<tr>
-						<td colspan="4" class="tdRight">
-							<span class='interval' id="detailRFID">RFID</span>
-							<span class='interval' id="detailScreen">Screen</span>
-							<span class='interval' id="detailSensor">
-								<span id="temperature">25℃</span>&nbsp;&nbsp;
-								<span id="humidness">80%</span>&nbsp;&nbsp;
-								<span id="illumination">1500L</span>		
-							</span>
-						</td>
-					</tr>
-					<tr><td colspan="4" class="tdLeft"><span class="ui-icon ui-icon-power"> </span><span id="detailDeviceStatus">&nbsp;</span></td></tr>
-					<tr>
-						<td>设备编码</td><td><span id="detailDeviceID">&nbsp;</span></td>
-						<td>设备名称</td><td><span id="detailDeviceName">&nbsp;</span></td>
-					</tr>
-					<tr>
-						<td>设备版本</td><td><span id="detailDeviceVersion">&nbsp;</span></td>
-						<td>激活日期</td><td><span id="detailRecordDate">&nbsp;</span></td>
-					</tr>
-					<tr>
-						<td colspan="2" style="width:50%;">
-							<div style="margin: 10px 0px;">
-								<div id="mediaA">监控摄像头A</div>
-							</div>
-						</td>
-						<td colspan="2" style="width:50%;">
-							<div style="margin: 10px 0px;">
-								<div id="mediaB">监控摄像头B</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>设备音量&nbsp;&nbsp;  <span id="volumeValue" style="color:#f6931f; font-weight:bold;"> </span></td>
-						<td colspan="3">
-							<div id="detailVolume"> </div>
-						</td>
-					</tr>
-					<tr>
-						<td>内置PC</td>
-						<td class="tdRight" colspan="3"><div class="switch"><input type="checkbox" id="detailPC"/></div></td>
-					</tr>	
-					<tr>
-						<td>显示通道</td>
-						<td class="tdRight" colspan="3"><div class="switch"><input type="checkbox" id="detailChannel"/></div></td>
-					</tr>	
-					
-					<tr>
-						<td>展台</td>
-						<td class="tdRight" colspan="3"><div class="switch"><input type="checkbox" id="detailBooth"/></div></td>
-					</tr>	
-					
-					<tr>
-						<td>外显</td>
-						<td class="tdRight" colspan="3"><div class="switch"><input type="checkbox" id="detailDisplayer"/></div></td>
-					</tr>	
-				
-				</table>
-				<table class="table">
-					<tbody id="detailSwitchBody">
-						<tr>
-							<td style="width:75%;">开关1</td>
-							<td class="tdRight">
-								<div id="switch11" class="switch"><input type="checkbox" name="switch11"/></div>
-							</td>
-							<td class="tdRight">
-								<div id="switch12" class="switch"><input type="checkbox" name="switch12"/></div>
-							</td>
-						</tr>
-						<tr>
-							<td style="width:75%;">开关2</td>
-							<td class="tdRight">
-								<div id="switch21" class="switch"><input type="checkbox" name="switch21"/></div>
-							</td>
-							<td class="tdRight">
-								<div id="switch22" class="switch"><input type="checkbox" name="switch22"/></div>
-							</td>
-						</tr>
-					
-					</tbody>
-					<tr>						
-						<td colspan="3" class="tdRight">
-							<input type="button" class="btn btn-sm btn-info" value ="返回" id="closeDeviceDetailBtn">
-						</td>
-					</tr>
-				</table>
-			</div><!-- deviceDetailPanel-->
-			
-		</div><!-- ./tabs-->
-			
-		
-				
-		
+	<body class="hold-transition skin-blue sidebar-mini">
+		<input type="hidden" value="${rc.contextPath}" id="baseUrl"/>
+		<div class="wrapper">
+			<div id="header">&nbsp;</div>
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<section class="content-header">
+					<h1> 设备管理 <small>已激活设备管理</small></h1>
+					<ol class="breadcrumb">
+						<li>
+							<a href="${rc.contextPath}"><i class="fa fa-dashboard"> </i> 首页</a>
+						</li>
+						<li class="active">
+							设备管理
+						</li>
+					</ol>
+				</section>
 
-			<div id="addBroadcastBox" style="display:none;">
-				<table class="table">
-					<tr>
-						<td>选择节目</td>
-						<td>
-							<select id="programSelect" class="form-control">
-								<option value="铃声.mp3">铃声.mp3</option>
-								<option value="广播体操.mp3">广播体操.mp3</option>
-								<option value="升旗仪式.mp3">升旗仪式.mp3</option>
-								<option value="眼保健操.mp3">眼保健操.mp3</option>
-								<option value="套马杆.mp3">套马杆.mp3</option>
-							</select>
-						</td>
-					</tr>		
-				</table>
+				<!-- Main content -->
+				<section class="content">
+					<div class="row">
+						<div class="col-xs-12">						
+
+							<div class="box">
+								<!--div class="box-header">
+									<h3 class="box-title">未激活设备列表</h3>
+								</div-->
+								<div class="box-header box-right-controll">
+									<input type="button" value="开机" class="btn btn-info" id="startDevice" >
+									<input type="button" value="关机" class="btn btn-info" id="shutdownDevice" >
+									<input type="button" value="广播" class="btn btn-info" id="openBoardcastBtn">
+								</div>
+								<!-- /.box-header -->
+								<div class="box-body">
+									<table id="deviceTable" class="table table-bordered table-hover">
+										<thead>
+											<tr>
+												<th>设备名称</th>
+												<th>设备ID</th>
+												<th>硬件版本</th>
+												<th>硬件状态</th>
+												<th>操作</th>
+											</tr>
+										</thead>
+										<tbody>	</tbody>
+										<tfoot>
+											<tr>
+												<th>设备名称</th>
+												<th>设备ID</th>
+												<th>硬件版本</th>
+												<th>硬件状态</th>
+												<th>操作</th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+						</div>
+						<!-- /.col -->
+						
+						
+						<!-- 模态框（Modal） -->
+						<div class="modal fade" id="addBroadcastBox" tabindex="-1" role="dialog"   aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" data-keyboard="true">
+						   <div class="modal-dialog">
+						      <div class="modal-content">
+						         <div class="modal-header">
+						            <button type="button" class="close"       data-dismiss="modal" aria-hidden="true">&times;</button>
+						            <h4 class="modal-title" id="myModalLabel">新增广播</h4>
+						         </div>
+						         <div class="modal-body">
+						            	<table class="table">
+											<tr>
+												<td>选择节目</td>
+												<td>
+													<select id="programSelect" class="form-control">
+														<option value="铃声.mp3">铃声.mp3</option>
+														<option value="广播体操.mp3">广播体操.mp3</option>
+														<option value="升旗仪式.mp3">升旗仪式.mp3</option>
+														<option value="眼保健操.mp3">眼保健操.mp3</option>
+														<option value="套马杆.mp3">套马杆.mp3</option>
+													</select>
+												</td>
+											</tr>		
+										</table>	
+						         </div><!--	 ./modal-body	 -->
+						         <div class="modal-footer">
+						            <button type="button" class="btn btn-default"  data-dismiss="modal">关闭 </button>
+						            <button type="button" class="btn btn-primary" id="boardcastBtn">广播</button>
+						         </div>
+						      </div><!-- /.modal-content -->
+						</div><!-- /.modal -->
+						
+						
+						
+					</div><!-- /.row -->
+					
+					
+					
+					
+				</section><!-- /.content -->
+				
 			</div>
+			<!-- /.content-wrapper -->
+
+			<footer class="main-footer" id="footer">
+
+			</footer>
+
+		</div>
+		<!-- ./wrapper -->
+
+		<!-- Bootstrap 3.3.6 -->
+		<script src="${rc.contextPath}/plugins/bootstrap/js/bootstrap.min.js"></script>
+		<!-- DataTables -->
+		<script src="${rc.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="${rc.contextPath}/plugins/datatables/dataTables.bootstrap.min.js"></script>
+		<!-- SlimScroll -->
+		<script src="${rc.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+		<!-- FastClick -->
+		<script src="${rc.contextPath}/plugins/fastclick/fastclick.js"></script>
+		<!-- AdminLTE App -->
+		<script src="${rc.contextPath}/plugins/adminlte/js/app.min.js"></script>
+		
+		<script src="${rc.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
+
+		<!-- brxy school server public js -->
+		<script src="${rc.contextPath}/js/brxy.js"></script>
+		<!-- page script -->
+		<script src="${rc.contextPath}/js/deviceCommonConstant.js"></script>
+		<script src="${rc.contextPath}/js/deviceMonitor.js"></script>
+		
+		<script type="text/javascript">
 			
-			<div id="footer"> </div>
-		</div><!-- /.container -->
+
+
+		</script>
 	</body>
-	
-	
-	<!-- jQuery first, then Bootstrap JS. -->
-	<script type="text/javascript" src="${base}/jquery-ui/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="${base}/bootstrap/js/bootstrap.js"></script>
-	<script type="text/javascript" src="${base}/jquery/jquery.validate.min.js"></script>
-	<script type="text/javascript" src="${base}/bootstrap/bootstrap-switch/bootstrap-switch.min.js"></script>
-	<script type="text/javascript" src="${base}/jwplayer/jwplayer.js"></script>
-	<script type="text/javascript" src="${base}/brxyTool.js"></script>
-	<script type="text/javascript" src="${base}/moment/moment.min.js"></script>
-	<script type="text/javascript" src="${base}/js/deviceMonitor.js"></script>
 </html>
-
-

@@ -25,12 +25,11 @@
 		<!-- jQuery-->
 		<script src="${rc.contextPath}/plugins/jQuery/jquery.min.js"></script>
 		<script>
-			var baseUrl = "${rc.contextPath}";
 			$(document).ready(function() {
-				$("#header").load("${rc.contextPath}/layout/header.ftl", function() {
+				$("#header").load("${rc.contextPath}/layout/header.html?baseUrl=${rc.contextPath}", function() {
 					$("#tmpDeviceLi").addClass("active");
 				});
-				$("#footer").load("${rc.contextPath}/layout/footer.ftl");
+				$("#footer").load("${rc.contextPath}/layout/footer.html");
 				//var baseUrl = $("#baseUrl").val();
 
 			});
@@ -43,6 +42,7 @@
 		<![endif]-->
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
+		<input type="hidden" id="baseUrl" value="${rc.contextPath}" />
 		<div class="wrapper">
 			<div id="header">&nbsp;</div>
 			<!-- Content Wrapper. Contains page content -->
@@ -75,8 +75,8 @@
 										<thead>
 											<tr>
 												<th>设备ID</th>
-												<th>硬件版本</th>
 												<th>设备名称</th>
+												<th>硬件版本</th>
 												<th>操作</th>
 											</tr>
 										</thead>
@@ -84,8 +84,8 @@
 										<tfoot>
 											<tr>
 												<th>设备ID</th>
-												<th>硬件版本</th>
 												<th>设备名称</th>
+												<th>硬件版本</th>
 												<th>操作</th>
 											</tr>
 										</tfoot>
@@ -122,21 +122,16 @@
 		<!-- AdminLTE App -->
 		<script src="${rc.contextPath}/plugins/adminlte/js/app.min.js"></script>
 
-		<!-- AdminLTE for demo purposes -->
-		<!--<script src="js/demo.js"></script>-->
-		<!-- page script -->
+		<!-- brxy school server public js -->
+		<script src="${rc.contextPath}/js/brxy.js"></script>
 		
-		<!--定义操作列按钮模板-->
-		<script id="tpl" type="text/x-handlebars-template">
-		    {{#each func}}
-		    <button type="button" class="btn btn-{{this.type}} btn-sm" onclick="{{this.fn}}">{{this.name}}</button>
-		    {{/each}}
-		</script>
+		<!-- page script -->
+			
 		<script type="text/javascript">
 			$(function () {
-				var t = $("#tmpDeviceTable").DataTable({
+				var table = $("#tmpDeviceTable").DataTable({
 					ajax:{
-						url:"http://localhost:8080/tmpDevice/list"
+						url:baseUrl+"/tmpDevice/list"
 					},
 					ordering:true,  //是否启用排序
 					searching: true,  //是否启用搜索
@@ -166,7 +161,7 @@
 						},{
 							targets:3,
 							render: function (data,type,row,meta) {   
-		                       return "<button type='button' class='btn btn-primary btn-sm' onclick='del(" + row.deviceID + ")'>激活</button>";
+		                       return "<button type='button' class='btn btn-primary btn-sm' id='" + row.deviceID + "' name='activeBtn'>激活</button>";
 		                    }
 						}
 					],
@@ -203,20 +198,48 @@
 			    $('#button').click( function () {
 			        alert( table.rows('.selected').data().length +' row(s) selected' );
 			    } );
-				/**
-			     * 删除数据
-			     * @param name
+			    
+			    
+			    /**
+			     * 激活设备
+			     * @param e
 			     */
-			    function del(deviceID) {
-			        $.ajax({
-			            url: "http://localhost:8080/tmpDevice/active",
-			            data: {
-			                "deviceID": deviceID
-			            }, success: function (data) {
-			                table.ajax.reload();
-			                console.log("删除成功" + data);
-			            }
-			        });
+			    $("#tmpDeviceTable tbody").on("click","button[name='activeBtn']",function(e){
+			    	var deviceID = $(this).attr("id");
+			        active(deviceID);
+			    	return false; //阻止触发selected事件
+			    });
+				
+			    function active(deviceID) {
+			    	console.log("activeDevice");
+					$.ajax({
+						type : "post",
+						dataType : "json",
+						url : baseUrl+'/tmpDevice/active',
+						data : {
+							act : "activeDevice",
+							deviceID:deviceID			
+						},
+						error : function(xhr, status, e) {
+							console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+							console.log(xhr.responseText);
+							alert("激活失败");
+						},
+						beforeSend : function() {
+							openWaitBox();
+						},
+						complete : function(XMLHttpRequest, textStatus) {
+							closeWaitBox();
+						},
+						success : function(data) {
+							alert(data.message);
+			            	if(data.result){
+				                table.ajax.reload();
+				                console.log("激活成功" + JSON.stringify(data));
+			            	}
+						}
+					});
+			        
 			    }
 				
 				

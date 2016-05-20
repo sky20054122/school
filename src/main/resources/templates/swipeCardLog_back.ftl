@@ -26,12 +26,12 @@
 		<script src="${rc.contextPath}/plugins/jQuery/jquery.min.js"></script>
 		<script>
 			$(document).ready(function() {
-				$("#header").load("${rc.contextPath}/layout/header.html?baseUrl=${rc.contextPath}", function() {
-					$("#tmpDeviceLi").addClass("active");
+				$("#header").load("${rc.contextPath}/layout/header.html", function() {
+					$("#deviceLi").addClass("active");
 				});
 				$("#footer").load("${rc.contextPath}/layout/footer.html");
 				//var baseUrl = $("#baseUrl").val();
-
+				
 			});
 		</script>
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -42,20 +42,20 @@
 		<![endif]-->
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
-		<input type="hidden" id="baseUrl" value="${rc.contextPath}" />
+		<input type="hidden" value="${rc.contextPath}" id="baseUrl"/>
 		<div class="wrapper">
 			<div id="header">&nbsp;</div>
 			<!-- Content Wrapper. Contains page content -->
 			<div class="content-wrapper">
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
-					<h1> 文件管理 <small>文件上传、删除</small></h1>
+					<h1> 设备管理 <small>已激活设备管理</small></h1>
 					<ol class="breadcrumb">
 						<li>
 							<a href="${rc.contextPath}"><i class="fa fa-dashboard"> </i> 首页</a>
 						</li>
 						<li class="active">
-							文件管理
+							设备管理
 						</li>
 					</ol>
 				</section>
@@ -67,68 +67,31 @@
 
 							<div class="box">
 								<div class="box-header">
-									<h3 class="box-title">文件列表</h3>
+									<h3 class="box-title">未激活设备列表</h3>
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body">
-									<table id="programTable" class="table table-bordered table-hover">
+									<table id="deviceTable" class="table table-bordered table-hover">
 										<thead>
 											<tr>
-												<th>文件名称</th>
-												<th>持续时长</th>
-												<th>上传时间</th>
-												<th>文件大小</th>
+												<th>设备名称</th>
+												<th>设备ID</th>
+												<th>硬件版本</th>
+												<th>硬件状态</th>
 												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>	</tbody>
 										<tfoot>
 											<tr>
-												<th>文件名称</th>
-												<th>持续时长</th>
-												<th>上传时间</th>
-												<th>文件大小</th>
+												<th>设备名称</th>
+												<th>设备ID</th>
+												<th>硬件版本</th>
+												<th>硬件状态</th>
 												<th>操作</th>
 											</tr>
 										</tfoot>
 									</table>
-								</div>
-								<!-- /.box-body -->
-							</div>
-							<!-- /.box -->
-							
-							<div class="box">
-								<div class="box-header">
-									<h3 class="box-title">上传文件</h3>
-								</div>
-								<!-- /.box-header -->
-								<div class="box-body">
-									<form id="uploadForm" method="post" action="${rc.contextPath}/file/fileUpload" enctype="multipart/form-data">
-										<div class="col-xs-6">
-											<input type="file" accept="audio/mp3" class="file" name="file" id="file"  style="display: inline;"/> 
-										</div>
-										<div class="col-xs-6" style="text-align: right;">
-											<input type="hidden" name="fileMD5" id="fileMD5"/>
-											<input type="hidden" name="duration" id="duration" />
-											<input type="hidden" name="fileExtension" id="fileExtension" />
-											<input type="hidden" name="fileSize" value="" id="fileSize"/>
-											<input type="submit" class="btn btn-info" id="uploadBtn" value="开始上传" style="display: none;"/>
-										</div>
-										<div class="col-xs-12" id="preview" style="margin: 1.5em auto;">
-											
-										</div>
-									    <div id="status" class="col-xs-12"> </div>
-										<div class="col-xs-12">
-									        <div class="progress">
-								                <div id="uploadProgress" class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
-								                  <span>0% Complete</span>
-								                </div>
-								            </div>
-									    </div>
-									    
-									</form>
-								
-								
 								</div>
 								<!-- /.box-body -->
 							</div>
@@ -161,20 +124,16 @@
 		<!-- AdminLTE App -->
 		<script src="${rc.contextPath}/plugins/adminlte/js/app.min.js"></script>
 
-		<script src="${rc.contextPath}/plugins/moment/moment.min.js"></script>
 		<!-- brxy school server public js -->
 		<script src="${rc.contextPath}/js/brxy.js"></script>
-		<script type="text/javascript" src="${rc.contextPath}/plugins/jQuery/jquery.form.js"></script>
-		<script type="text/javascript" src="${rc.contextPath}/plugins/fileCalculator/calculator_md5.js"></script>
-		
-		<script type="text/javascript" src="${rc.contextPath}/js/fileUpload.js"></script>
 		<!-- page script -->
-			
+		
+		
 		<script type="text/javascript">
 			$(function () {
-				var table = $("#programTable").DataTable({
+				var table = $("#deviceTable").DataTable({
 					ajax:{
-						url:baseUrl+"/program/findAll"
+						url:baseUrl+"/device/queryMonitorDevice"
 					},
 					ordering:true,  //是否启用排序
 					searching: true,  //是否启用搜索
@@ -184,53 +143,32 @@
 					autoWidth: false,  //值为false的时候 表格随着浏览器大小变化
 					pageLength:10,
 					columns:[
-						{data:"name"},
-						{data:"duration"},
-						{data:"recordDate"},
-						{data:"fileSize"},					
-						{data:null}						
+						{"data":"deviceName"},
+						{"data":"deviceId"},
+						{"data":"firmversion"},
+						{"data":"deviceStatus"},
+						{data:null}
 					],
 					columnDefs:[
 						{
 							visible:true,
-							orderable:false, //第5列禁止排序
-							targets:4,
-							render: function (data,type,row,meta) {   
-		                       return "<button type='button' class='btn btn-primary btn-sm' id='" + row.id + "' name='delete'>删除</button>";
-		                    }
+							orderable:false, //第四列禁止排序
+							targets:3
 						},
 						{
 							render:function(data,type,row,meta){
 								//渲染 把数据源中的标题和url组成超链接
-            					return '<a href="' + data + '" target="_blank" title="点击预览">' + row.name + '</a>';
+            					return '<a href="' + data + '" target="_blank">' + row.deviceName + '</a>';
 							},
 							targets:0
-						},
-						{
-							render:function(data,type,row,meta){
-								var duration = row.duration;
-								var durationHMS = convertDurationToHMS(duration);
-								//把音频时长转换为时分秒格式  00:03:25
-            					return durationHMS;
-							},
-							targets:1
-						},
-						{
-							render:function(data,type,row,meta){
-								//渲染 把数据源中的标题和url组成超链接
-								var recordDate = moment(row.recordDate).format("YYYY-MM-DD HH:mm:ss");
-            					return  recordDate;
-							},
-							targets:2  //时间显示格式化
-						},
-						{
-							render:function(data,type,row,meta){
-								var fileSize = row.fileSize;
-								var fileSizeStr = convertFileSize(fileSize);
-								//把文件大小格式化
-            					return fileSizeStr;
-							},
-							targets:3  //文件大小格式化
+						},{
+							targets:4,
+							render: function (data,type,row,meta) {   
+		                       var html = "<button type='button' class='btn btn-primary btn-sm' id='" + row.deviceId + "' name='detailBtn'>详情</button>&nbsp;&nbsp;"
+		                       +"<button type='button' class='btn btn-danger btn-sm' id='" + row.deviceId + "' name='delBtn'>删除</button>&nbsp;&nbsp;"
+		                       +"<button type='button' class='btn btn-info btn-sm' id='" + row.deviceId + "' name='logBtn'>日志</button>";
+		                    	return html;
+		                    }
 						}
 					],
 					language: {
@@ -259,66 +197,91 @@
 				    }					
 				});
 				
-				$('#programTable tbody').on( 'click', 'tr', function () {
+				$('#deviceTable tbody').on( 'click', 'tr', function () {
 			        $(this).toggleClass('selected');
 			    } );
 			 
+			 //获取所有的选择项
 			    $('#button').click( function () {
 			        alert( table.rows('.selected').data().length +' row(s) selected' );
 			    } );
 			    
-			    /**
-			     * 把音频时长转换为时分秒格式
-			     */
-			    function convertDurationToHMS(duration){
-			    	var hour = Math.floor (duration / 3600);
-			    	if (hour<10) {
-			    		hour="0"+hour;
-			    	};
-					var other = duration % 3600;
-					var minute = Math.floor (other / 60);
-					if (minute<10) {
-			    		minute="0"+minute;
-			    	};
-					var second = (other % 60);
-					if (second<10) {
-			    		second="0"+second;
-			    	};
-					var hms = hour + ':' + minute + ':' + second;
-			    	return hms; 
-			    }
 			    
 			    /**
-			     * 文件大小格式化  字节转换为MB
-			     */
-			    function convertFileSize(fileSize){
-			    	var fileSizeStr = (fileSize/1024/1024).toFixed(2);
-			    	return fileSizeStr+"MB";
-			    }
-			    
-			    /**
-			     * 删除文件
+			     * 设备刷卡日志
 			     * @param e
 			     */
-			    $("#programTable tbody").on("click","button[name='delete']",function(e){
-			    	var programID = $(this).attr("id");
-			    	deleteProgram(programID);
+			    $("#deviceTable tbody").on("click","button[name='logBtn']",function(e){
+			    	var deviceID = $(this).attr("id");
+			    	window.location.href=baseUrl+"/log/main?deviceID="+deviceID+"&cardID=123";
+			    	return false; //阻止触发selected事件
+			    });
+			    
+			    /**
+			     * 设备详情
+			     * @param e
+			     */
+			    $("#deviceTable tbody").on("click","button[name='detailBtn']",function(e){
+			    	var deviceID = $(this).attr("id");
+			    	getDeviceDetail(deviceID);
 			    	return false; //阻止触发selected事件
 			    });
 				
-			    function deleteProgram(programID) {
-			    	console.log("deleteProgram programID="+programID);
+			    function getDeviceDetail(deviceID) {
+			    	console.log("getDeviceDetail deviceID="+deviceID);
 					$.ajax({
 						type : "post",
 						dataType : "json",
-						url : baseUrl+'/program/deleteProgramFile',
+						url : baseUrl+'/device/getDeviceDetail',
 						data : {
-							programID:programID			
+							deviceID:deviceID			
 						},
 						error : function(xhr, status, e) {
 							console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
 							console.log(xhr.responseText);
-							alert("删除节目失败");
+							alert("getDeviceDetail fail ");
+						},
+						beforeSend : function() {
+							openWaitBox();
+						},
+						complete : function(XMLHttpRequest, textStatus) {
+							closeWaitBox();
+						},
+						success : function(data) {
+			            	if(data.result){
+				                table.ajax.reload();
+				                console.log("getDeviceDetail success" + JSON.stringify(data));
+			            	}else{
+								alert(data.message);
+			            	}
+						}
+					});
+			    }
+			    
+			    
+			    /**
+			     * 删除设备
+			     * @param e
+			     */
+			    $("#deviceTable tbody").on("click","button[name='delBtn']",function(e){
+			    	var deviceID = $(this).attr("id");
+			    	deleteDevice(deviceID);
+			    	return false; //阻止触发selected事件
+			    });
+				
+			    function deleteDevice(deviceID) {
+			    	console.log("deleteDevice deviceID="+deviceID);
+					$.ajax({
+						type : "post",
+						dataType : "json",
+						url : baseUrl+'/device/deleteDevice',
+						data : {
+							deviceID:deviceID			
+						},
+						error : function(xhr, status, e) {
+							console.error('JqueryAjax error invoke! status:' + status+ e + " " + xhr.status);
+							console.log(xhr.responseText);
+							alert("deleteDevice fail ");
 						},
 						beforeSend : function() {
 							openWaitBox();
@@ -330,15 +293,22 @@
 							alert(data.message);
 			            	if(data.result){
 				                table.ajax.reload();
-				                console.log("删除节目成功" + JSON.stringify(data));
+				                console.log("deleteDevice success" + JSON.stringify(data));
+			            	}else{
 			            	}
 						}
 					});
-			        
 			    }
 				
 				
-
+// $('#example2').DataTable({
+// "paging": true,
+// "lengthChange": false,
+// "searching": false,
+// "ordering": true,
+// "info": true,
+// "autoWidth": false
+// });
 
 });
 

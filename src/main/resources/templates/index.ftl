@@ -24,10 +24,10 @@
 	
     <script>
         $(document).ready(function() {
-            $("#header").load("${rc.contextPath}/layout/header.ftl",function(response,status,xhr){
+            $("#header").load("${rc.contextPath}/layout/header.html",function(response,status,xhr){
                 //$("#welcome").addClass("active");
             });
-            $("#footer").load("${rc.contextPath}/layout/footer.ftl");
+            $("#footer").load("${rc.contextPath}/layout/footer.html");
             
         });
     </script>

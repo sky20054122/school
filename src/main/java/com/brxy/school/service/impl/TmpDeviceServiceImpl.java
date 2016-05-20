@@ -51,7 +51,7 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 		List<TmpDevice> list = this.tmpdeviceRespository.findAll();
 		logger.info("find all tmpDevice");
 		//添加测试数据
-		if(list.isEmpty()||list.size()<10){
+		if(list.isEmpty()||list.size()<20){
 			
 			addTmpDeviceDemo();
 			
@@ -62,7 +62,7 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 
 	@Transactional
 	private void addTmpDeviceDemo() {
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 2500; i++) {
 			String uuid = UUID.randomUUID().toString();
 			TmpDevice t = new TmpDevice( uuid+i, uuid+i, Firmversion.DTSK3);
 			TmpDevice td = this.tmpdeviceRespository.save(t);

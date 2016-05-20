@@ -8,13 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.brxy.school.common.DeviceStatus;
 import com.brxy.school.common.DeviceType;
-import com.brxy.school.common.Firmversion;
 import com.brxy.school.common.OperationType;
 import com.brxy.school.model.Device;
 import com.brxy.school.service.DeviceService;
@@ -41,13 +40,20 @@ public class DeviceController {
 	
 	@ResponseBody
 	@RequestMapping("queryMonitorDevice")
-	public List<Device> findAll(@RequestParam("deviceID")String deviceID,
-			@RequestParam("deviceName")String deviceName,
-			@RequestParam("deviceVersion")Firmversion firmversion,
-			@RequestParam("deviceStatus")DeviceStatus deviceStatus){
+	public Map<String,Object> findAll(){
 		
-		logger.debug(deviceID+"  "+deviceName+" "+deviceStatus+" "+firmversion);
-		return this.deviceService.findAll();
+		logger.debug("queryMonitorDevice");
+		List<Device> list =  this.deviceService.findAll();
+		Map<String,Object> result = new HashMap<>();
+		result.put("data", list);
+		return result;
+	}
+	
+	@RequestMapping(value="/detail/{deviceID}")
+	public String detail(@PathVariable String deviceID,Map<String, Object> model){
+		logger.info("device detail page deviceID="+deviceID);
+		model.put("deviceID", deviceID);
+		return "deviceDetail";
 	}
 	
 	
