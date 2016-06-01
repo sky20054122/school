@@ -17,6 +17,11 @@ public interface DeviceService {
 	
 	public List<Device> findAll();
 	
+	/**
+	 * 根据设备id查找设备 设备id为设备编码 所以是String
+	 * @param deviceID
+	 * @return
+	 */
 	public Device findOne(String deviceID);
 
 	public Map<String, Object> delete(String deviceID);

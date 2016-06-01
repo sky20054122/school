@@ -1,6 +1,8 @@
 package com.brxy.school.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,11 +13,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
+import com.brxy.school.common.ScheduleRange;
 import com.brxy.school.common.Weekday;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -51,6 +57,13 @@ public class Schedule implements Serializable {
 	@JoinColumn(name="FK_SCHEMA_ID")
 	private Schema schema;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name="SCHEDULE_RANGE")
+	private ScheduleRange scheduleRange;
+	
+	@ManyToMany(fetch=FetchType.EAGER,targetEntity=Device.class)
+	@JoinTable(name=CommonConstants.TABLE_PREFIX+"schedule_device",joinColumns={@JoinColumn(name="FK_SCHEDULE_ID")},inverseJoinColumns={@JoinColumn(name="FK_DEVICE_ID")})
+	private Set<Device> devices = new HashSet<>();
 	
 
 	public Long getId() {
@@ -101,6 +114,7 @@ public class Schedule implements Serializable {
 		this.program = program;
 	}
 
+	@JsonIgnore
 	public Schema getSchema() {
 		return schema;
 	}
@@ -108,15 +122,50 @@ public class Schedule implements Serializable {
 	public void setSchema(Schema schema) {
 		this.schema = schema;
 	}
+	
+	
+
+	
+
+	public ScheduleRange getScheduleRange() {
+		return scheduleRange;
+	}
+
+	public void setScheduleRange(ScheduleRange scheduleRange) {
+		this.scheduleRange = scheduleRange;
+	}
+	
+	
+
+	public Set<Device> getDevices() {
+		return devices;
+	}
+
+	public void setDevices(Set<Device> devices) {
+		this.devices = devices;
+	}
 
 	public Schedule() {
 		super();
+	}
+	
+	
+
+	public Schedule(Long id, Long index, String startTime, String endTime, Weekday weekday, Program program,ScheduleRange scheduleRange) {
+		super();
+		this.id = id;
+		this.index = index;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.weekday = weekday;
+		this.program = program;
+		this.scheduleRange = scheduleRange;
 	}
 
 	@Override
 	public String toString() {
 		return "Schedule [id=" + id + ", index=" + index + ", startTime=" + startTime + ", endTime=" + endTime
-				+ ", weekday=" + weekday + "]";
+				+ ", weekday=" + weekday + ", scheduleRange=" + scheduleRange + "]";
 	}
 	
 	

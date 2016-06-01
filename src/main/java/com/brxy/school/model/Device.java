@@ -91,6 +91,9 @@ public class Device implements Serializable {
 
 	@ManyToMany(fetch = FetchType.LAZY, targetEntity = Card.class,mappedBy="devices")
 	private Set<Card> cards = new HashSet<Card>();
+	
+	@ManyToMany(fetch=FetchType.LAZY,targetEntity=Schedule.class,mappedBy="devices",cascade={CascadeType.REFRESH,CascadeType.MERGE,CascadeType.PERSIST})
+	private Set<Schedule> schedules = new HashSet<Schedule>();
 
 	public Device() {
 		super();
@@ -226,6 +229,26 @@ public class Device implements Serializable {
 	public void setCards(Set<Card> cards) {
 		this.cards = cards;
 	}
+	
+	
+	@JsonIgnore
+	public Set<Schedule> getSchedules() {
+		return schedules;
+	}
+
+
+
+	public void setSchedules(Set<Schedule> schedules) {
+		this.schedules = schedules;
+	}
+
+
+
+	public Displayer getDisplayer() {
+		return displayer;
+	}
+
+
 
 	@Override
 	public int hashCode() {

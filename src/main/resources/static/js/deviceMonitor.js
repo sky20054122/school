@@ -38,6 +38,7 @@ $(function() {
 			targets : 0
 		}, {
 			targets : 4,
+			orderable:false, //第5列禁止排序
 			render : function(data, type, row, meta) {
 				var html = "<button type='button' class='btn btn-primary btn-sm' id='" + row.deviceId + "' name='detailBtn'>详情</button>&nbsp;&nbsp;" + "<button type='button' class='btn btn-danger btn-sm' id='" + row.deviceId + "' name='delBtn'>删除</button>&nbsp;&nbsp;" + "<button type='button' class='btn btn-info btn-sm' id='" + row.deviceId + "' name='logBtn'>日志</button>";
 				return html;
@@ -198,7 +199,7 @@ $(function() {
 			success : function(result) {
 					alert(result.message);
 					if(result.result){
-						 $('#addBroadcastBox').modal('close');
+						 $('#addBroadcastBox').modal('hide');
 					}
 			}
 		});

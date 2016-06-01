@@ -96,7 +96,7 @@
 							<a href="${rc.contextPath}"><i class="fa fa-dashboard"> </i> 首页</a>
 						</li>
 						<li>
-							<a href="${rc.contextPath}/device/queryMonitorDevice"><i class="fa fa-dashboard"> </i> 设备监控</a>
+							<a href="${rc.contextPath}/device/main"><i class="fa fa-dashboard"> </i> 设备监控</a>
 						</li>
 						<li class="active">
 							设备详情
