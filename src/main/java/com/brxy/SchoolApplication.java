@@ -1,9 +1,12 @@
 package com.brxy;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
-@SpringBootApplication
+
+@EnableAutoConfiguration
+@EnableWebSocket
 public class SchoolApplication {
 	
 	/*@Bean  
@@ -14,6 +17,10 @@ public class SchoolApplication {
         factory.setMaxRequestSize("120MB");  
         return factory.createMultipartConfig();  
     }  */
+	
+	
+
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolApplication.class, args);

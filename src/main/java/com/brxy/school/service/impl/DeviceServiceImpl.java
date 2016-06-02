@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.brxy.school.common.Firmversion;
 import com.brxy.school.model.Device;
 import com.brxy.school.model.Schedule;
 import com.brxy.school.repository.DeviceRepository;
@@ -58,6 +59,12 @@ public class DeviceServiceImpl implements DeviceService {
 		result.put("message","delete device success");
 		logger.info("delete device deviceID="+deviceID);
 		return result;
+	}
+
+	@Override
+	public Firmversion getDeviceFirmversionByID(String deviceUUID) {
+		Device d= this.deviceRepository.findOne(deviceUUID);
+		return d.getFirmversion();
 	}
 
 }

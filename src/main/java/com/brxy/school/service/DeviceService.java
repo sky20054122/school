@@ -3,6 +3,7 @@ package com.brxy.school.service;
 import java.util.List;
 import java.util.Map;
 
+import com.brxy.school.common.Firmversion;
 import com.brxy.school.model.Device;
 
 /**
@@ -25,5 +26,8 @@ public interface DeviceService {
 	public Device findOne(String deviceID);
 
 	public Map<String, Object> delete(String deviceID);
+
+	public Firmversion getDeviceFirmversionByID(String deviceUUID);
+	
 	
 }

@@ -55,13 +55,13 @@
 			<div class="content-wrapper">
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
-					<h1> 计划任务 <small>方案管理</small></h1>
+					<h1> 一卡通管理 <small>一卡通的新增、修改、删除</small></h1>
 					<ol class="breadcrumb">
 						<li>
 							<a href="${rc.contextPath}"><i class="fa fa-dashboard"> </i> 首页</a>
 						</li>
 						<li class="active">
-							计划方案
+							一卡通管理
 						</li>
 					</ol>
 				</section>
@@ -77,25 +77,25 @@
 								</div>
 								<!-- /.box-header -->
 								<div class="box-body">
-									<table id="schemaTable" class="table table-bordered table-hover">
+									<table id="rfidCardTable" class="table table-bordered table-hover">
 										<thead>
 											<tr>
-												<th>方案名称</th>
-												<th>创建时间</th>
-												<th>修改时间</th>
-												<th>备注信息</th>
-												<th>方案状态</th>
+												<th>卡号</th>
+												<th>用户姓名</th>
+												<th>电话</th>
+												<th>开卡日期</th>
+												<th>修改日期</th>
 												<th>操作</th>
 											</tr>
 										</thead>
 										<tbody>	</tbody>
 										<tfoot>
 											<tr>
-												<th>方案名称</th>
-												<th>创建时间</th>
-												<th>修改时间</th>
-												<th>备注信息</th>
-												<th>方案状态</th>
+												<th>卡号</th>
+												<th>用户姓名</th>
+												<th>电话</th>
+												<th>开卡日期</th>
+												<th>修改日期</th>
 												<th>操作</th>
 											</tr>
 										</tfoot>
@@ -117,7 +117,7 @@
 
 			</footer>
 			
-			<!-- 模态框（Modal）新增方案 -->
+			<!-- 模态框（Modal） -->
 			<div class="modal fade" id="addSchedmaBox" tabindex="-1" role="dialog"   aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="false" data-keyboard="true">
 			   <div class="modal-dialog">
 			      <div class="modal-content">
@@ -143,7 +143,7 @@
 			         </div>
 			      </div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
-			</div><!-- /.模态框（Modal）新增方案 -->
+			</div><!-- ./模态框（Modal） -->
 
 		</div>
 		<!-- ./wrapper -->
@@ -167,9 +167,9 @@
 			
 		<script type="text/javascript">
 			$(function () {
-				var table = $("#schemaTable").DataTable({
+				var table = $("#rfidCardTable").DataTable({
 					ajax:{
-						url:baseUrl+"/schema/findAll"
+						url:baseUrl+"/card/findAll"
 					},
 					ordering:true,  //是否启用排序
 					searching: true,  //是否启用搜索
@@ -179,11 +179,11 @@
 					autoWidth: false,  //值为false的时候 表格随着浏览器大小变化
 					pageLength:10,
 					columns:[
-						{"data":"name"},
-						{"data":"recordDate"},
-						{"data":"updateDate"},
-						{data:"comments"},
-						{data:"schemaStatus"},
+						{data:"cardId"},
+						{data:"username"},
+						{data:"phone"},
+						{data:"recordDate"},
+						{data:"updateDate"},
 						{data:null}
 					],
 					columnDefs:[
@@ -198,7 +198,7 @@
 								var recordDate = moment(row.recordDate).format("YYYY-MM-DD HH:mm:ss");
             					return  recordDate;
 							},
-							targets:1  //时间显示格式化
+							targets:3  //时间显示格式化
 						},
 						{
 							render:function(data,type,row,meta){
@@ -210,26 +210,20 @@
 									return "";
 								}
 							},
-							targets:2  //时间显示格式化
+							targets:4  //时间显示格式化
 						},
 						{
 							render:function(data,type,row,meta){
 								//渲染 把数据源中的标题和url组成超链接
-            					return '<a href="' + baseUrl + '/schema/update/'+row.id+'">' + row.name + '</a>';
+            					return '<a href="' + baseUrl + '/card/detail/'+row.id+'">' + row.cardId + '</a>';
 							},
 							targets:0
 						},{
 							targets:5,
 							render: function (data,type,row,meta) {   
-								var buttonHtml = "";
-								var status = row.schemaStatus;
-								if (status=="ENABLED") {//启用状态， 操作禁用
-									buttonHtml = "<button type='button' class='btn btn-info btn-sm' id='" + row.id + "' name='disableBtn'>禁用</button>";
-								}else if(status=="DISABLED"){ //禁用状态 操作启用，修改、 删除
-									buttonHtml = "<button type='button' class='btn btn-info btn-sm' id='" + row.id + "' name='enableBtn'>启用</button>&nbsp;";
+									var buttonHtml = "<button type='button' class='btn btn-info btn-sm' id='" + row.id + "' name='enableBtn'>查看</button>&nbsp;";
 									buttonHtml += "<button type='button' class='btn btn-warning btn-sm' id='" + row.id + "' name='updateBtn'>修改</button>&nbsp;";
 									buttonHtml += "<button type='button' class='btn btn-danger btn-sm' id='" + row.id + "' name='deleteBtn'>删除</button>&nbsp;";
-								};
 		                       return buttonHtml;
 		                    }
 						}
@@ -260,7 +254,7 @@
 				    }					
 				});
 				
-				// $('#schemaTable tbody').on( 'click', 'tr', function () {
+				// $('#rfidCardTable tbody').on( 'click', 'tr', function () {
 			        // $(this).toggleClass('selected');
 			    // } );
 			 
@@ -322,7 +316,7 @@ function addSchema(addSchemaName,addSchemaComment){
 			     * 禁用方案
 			     * @param e
 			     */
-			    $("#schemaTable tbody").on("click","button[name='disableBtn']",function(e){
+			    $("#rfidCardTable tbody").on("click","button[name='disableBtn']",function(e){
 			    	var schemaID = $(this).attr("id");
 			        disableSchema(schemaID);
 			    	return false; //阻止触发selected事件
@@ -332,7 +326,7 @@ function addSchema(addSchemaName,addSchemaComment){
 			     * 启用方案
 			     * @param e
 			     */
-			    $("#schemaTable tbody").on("click","button[name='enableBtn']",function(e){
+			    $("#rfidCardTable tbody").on("click","button[name='enableBtn']",function(e){
 			    	var schemaID = $(this).attr("id");
 			        enableSchema(schemaID);
 			    	return false; //阻止触发selected事件
@@ -342,7 +336,7 @@ function addSchema(addSchemaName,addSchemaComment){
 			     * 删除方案
 			     * @param e
 			     */
-			    $("#schemaTable tbody").on("click","button[name='deleteBtn']",function(e){
+			    $("#rfidCardTable tbody").on("click","button[name='deleteBtn']",function(e){
 			    	var schemaID = $(this).attr("id");
 			        deleteSchema(schemaID);
 			    	return false; //阻止触发selected事件
@@ -352,7 +346,7 @@ function addSchema(addSchemaName,addSchemaComment){
 			     * 修改方案
 			     * @param e
 			     */
-			    $("#schemaTable tbody").on("click","button[name='updateBtn']",function(e){
+			    $("#rfidCardTable tbody").on("click","button[name='updateBtn']",function(e){
 			    	var schemaID = $(this).attr("id");
 			    	//TODO 跳转到详情页面
 			    	window.location.href=baseUrl+"/schema/update/"+schemaID;
