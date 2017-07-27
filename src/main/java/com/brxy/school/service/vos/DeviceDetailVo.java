@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.brxy.school.common.DeviceStatus;
-import com.brxy.school.common.Firmversion;
+import com.brxy.school.common.FirmVersion;
 import com.brxy.school.model.device.Booth;
 import com.brxy.school.model.device.Displayer;
 import com.brxy.school.model.device.MediaURL;
@@ -26,7 +26,7 @@ public class DeviceDetailVo {
 
 	private String deviceName;
 
-	private Firmversion firmversion;
+	private FirmVersion firmVersion;
 
 	private DeviceStatus deviceStatus;
 
@@ -74,12 +74,12 @@ public class DeviceDetailVo {
 		this.deviceName = deviceName;
 	}
 
-	public Firmversion getFirmversion() {
-		return firmversion;
+	public FirmVersion getFirmVersion() {
+		return firmVersion;
 	}
 
-	public void setFirmversion(Firmversion firmversion) {
-		this.firmversion = firmversion;
+	public void setFirmVersion(FirmVersion firmVersion) {
+		this.firmVersion = firmVersion;
 	}
 
 	public DeviceStatus getDeviceStatus() {

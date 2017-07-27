@@ -45,7 +45,7 @@ public class FileController {
 			// 取得当前上传文件的文件名称
 			String myFileName = file.getOriginalFilename();
 			// 如果名称不为“”,说明该文件存在，否则说明该文件不存在
-			if (myFileName.trim() != "") {
+			if (!myFileName.trim().isEmpty()) {
 				logger.info(myFileName);
 				// 重命名上传后的文件名
 				String fileName = "demoUpload" + file.getOriginalFilename();

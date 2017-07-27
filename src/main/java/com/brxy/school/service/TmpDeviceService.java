@@ -3,7 +3,7 @@ package com.brxy.school.service;
 import java.util.List;
 import java.util.Map;
 
-import com.brxy.school.model.TmpDevice;
+import com.brxy.school.model.TempDevice;
 
 /**
 *
@@ -13,7 +13,7 @@ import com.brxy.school.model.TmpDevice;
 public interface TmpDeviceService {
 
 	
-	public List<TmpDevice> findAll();
+	public List<TempDevice> findAll();
 	
 	public Map<String,Object> actviveTmpDevice(String deviceID);
 	

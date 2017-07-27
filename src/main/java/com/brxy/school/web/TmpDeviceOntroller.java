@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.brxy.school.model.TmpDevice;
+import com.brxy.school.model.TempDevice;
 import com.brxy.school.service.TmpDeviceService;
 
 /**
@@ -38,7 +38,7 @@ public class TmpDeviceOntroller {
 	
 	@ResponseBody
 	@RequestMapping(value="/list")
-	public List<TmpDevice> getTmpDeviceList(){
+	public List<TempDevice> getTmpDeviceList(){
 		logger.info("getTmpDeviceList");
 		return this.tmpDeviceService.findAll();
 	}

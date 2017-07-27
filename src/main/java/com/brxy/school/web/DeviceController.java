@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.brxy.school.common.DeviceStatus;
 import com.brxy.school.common.DeviceType;
-import com.brxy.school.common.Firmversion;
+import com.brxy.school.common.FirmVersion;
 import com.brxy.school.common.OperationType;
 import com.brxy.school.model.Device;
 import com.brxy.school.service.DeviceService;
@@ -43,10 +43,10 @@ public class DeviceController {
 	@RequestMapping("queryMonitorDevice")
 	public List<Device> findAll(@RequestParam("deviceID")String deviceID,
 			@RequestParam("deviceName")String deviceName,
-			@RequestParam("deviceVersion")Firmversion firmversion,
+			@RequestParam("deviceVersion")FirmVersion firmVersion,
 			@RequestParam("deviceStatus")DeviceStatus deviceStatus){
 		
-		logger.debug(deviceID+"  "+deviceName+" "+deviceStatus+" "+firmversion);
+		logger.debug(deviceID+"  "+deviceName+" "+deviceStatus+" "+ firmVersion);
 		return this.deviceService.findAll();
 	}
 	

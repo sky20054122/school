@@ -10,11 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
-import com.brxy.school.common.Firmversion;
+import com.brxy.school.common.FirmVersion;
 
 @Entity
 @Table(name=CommonConstants.TABLE_PREFIX+"temdevice")
-public class TmpDevice implements Serializable {
+public class TempDevice implements Serializable {
 
 	
 	private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class TmpDevice implements Serializable {
 	
 	@Column(name="FIRMVERSION")
 	@Enumerated(EnumType.STRING)
-	private Firmversion firmversion;
+	private FirmVersion firmVersion;
 
 
 	public String getDeviceID() {
@@ -48,18 +48,18 @@ public class TmpDevice implements Serializable {
 		this.deviceName = deviceName;
 	}
 
-	public Firmversion getFirmversion() {
-		return firmversion;
+	public FirmVersion getFirmVersion() {
+		return firmVersion;
 	}
 
-	public void setFirmversion(Firmversion firmversion) {
-		this.firmversion = firmversion;
+	public void setFirmVersion(FirmVersion firmVersion) {
+		this.firmVersion = firmVersion;
 	}
 
 	@Override
 	public String toString() {
-		return "TmpDevice [deviceID=" + deviceID + ", deviceName=" + deviceName + ", firmversion="
-				+ firmversion + "]";
+		return "TempDevice [deviceID=" + deviceID + ", deviceName=" + deviceName + ", firmVersion="
+				+ firmVersion + "]";
 	}
 
 
@@ -70,7 +70,7 @@ public class TmpDevice implements Serializable {
 		int result = 1;
 		result = prime * result + ((deviceID == null) ? 0 : deviceID.hashCode());
 		result = prime * result + ((deviceName == null) ? 0 : deviceName.hashCode());
-		result = prime * result + ((firmversion == null) ? 0 : firmversion.hashCode());
+		result = prime * result + ((firmVersion == null) ? 0 : firmVersion.hashCode());
 		return result;
 	}
 
@@ -82,7 +82,7 @@ public class TmpDevice implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TmpDevice other = (TmpDevice) obj;
+		TempDevice other = (TempDevice) obj;
 		if (deviceID == null) {
 			if (other.deviceID != null)
 				return false;
@@ -93,20 +93,20 @@ public class TmpDevice implements Serializable {
 				return false;
 		} else if (!deviceName.equals(other.deviceName))
 			return false;
-		if (firmversion != other.firmversion)
+		if (firmVersion != other.firmVersion)
 			return false;
 		return true;
 	}
 
-	public TmpDevice() {
+	public TempDevice() {
 		super();
 	}
 
-	public TmpDevice(String deviceID, String deviceName, Firmversion firmversion) {
+	public TempDevice(String deviceID, String deviceName, FirmVersion firmVersion) {
 		super();
 		this.deviceID = deviceID;
 		this.deviceName = deviceName;
-		this.firmversion = firmversion;
+		this.firmVersion = firmVersion;
 	}
 
 	

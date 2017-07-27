@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.brxy.school.common.FirmVersion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.brxy.school.common.DeviceStatus;
-import com.brxy.school.common.Firmversion;
 import com.brxy.school.model.Device;
-import com.brxy.school.model.TmpDevice;
+import com.brxy.school.model.TempDevice;
 import com.brxy.school.model.device.ChildSwitch;
 import com.brxy.school.model.device.Displayer;
 import com.brxy.school.model.device.MediaURL;
@@ -27,7 +27,7 @@ import com.brxy.school.model.device.Rfid;
 import com.brxy.school.model.device.Screen;
 import com.brxy.school.model.device.Sensor;
 import com.brxy.school.repository.DeviceRepository;
-import com.brxy.school.repository.TmpdeviceRespository;
+import com.brxy.school.repository.TempDeviceRepository;
 import com.brxy.school.service.TmpDeviceService;
 
 /**
@@ -41,14 +41,14 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 	private static final Logger logger = LoggerFactory.getLogger(TmpDeviceServiceImpl.class);
 
 	@Autowired
-	private TmpdeviceRespository tmpdeviceRespository;
+	private TempDeviceRepository tempDeviceRepository;
 	
 	@Autowired
 	private DeviceRepository deviceRepository;
 	
 	@Override
-	public List<TmpDevice> findAll() {
-		List<TmpDevice> list = this.tmpdeviceRespository.findAll();
+	public List<TempDevice> findAll() {
+		List<TempDevice> list = this.tempDeviceRepository.findAll();
 		logger.info("find all tmpDevice");
 		//添加测试数据
 		if(list.isEmpty()||list.size()<3){
@@ -64,8 +64,8 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 	private void addTmpDeviceDemo() {
 		for (int i = 0; i < 5; i++) {
 			String uuid = UUID.randomUUID().toString();
-			TmpDevice t = new TmpDevice( uuid+i, uuid+i, Firmversion.DTSK3);
-			TmpDevice td = this.tmpdeviceRespository.save(t);
+			TempDevice t = new TempDevice( uuid+i, uuid+i, FirmVersion.DTSK3);
+			TempDevice td = this.tempDeviceRepository.save(t);
 			logger.info("create demo tmpDevice"+td.toString());
 		}
 		
@@ -73,16 +73,16 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 
 	/**
 	 * 激活设备 
-	 * 把设备从临时表存储到正式表 TmpDevice --》 Device
+	 * 把设备从临时表存储到正式表 TempDevice --》 Device
 	 */
 	@Override
 	@Transactional
 	public Map<String, Object> actviveTmpDevice(String deviceID) {
 		
 		Map<String,Object> result = new HashMap<String,Object>();
-		TmpDevice t = this.tmpdeviceRespository.findOne(deviceID);
+		TempDevice t = this.tempDeviceRepository.findOne(deviceID);
 		if(null!=t){
-			Device d = new Device(t.getDeviceID(), t.getDeviceName(), t.getFirmversion(), DeviceStatus.OFFLINE, new Date());
+			Device d = new Device(t.getDeviceID(), t.getDeviceName(), t.getFirmVersion(), DeviceStatus.OFFLINE, new Date());
 			
 			//TODO 测试假数据    自动补齐设备基本信息  pc rfid 。。。
 			PC pc = new PC("el_pc", DeviceStatus.ONLINE,d);
@@ -111,10 +111,10 @@ public class TmpDeviceServiceImpl implements TmpDeviceService {
 			this.deviceRepository.save(d);
 			
 			
-			this.tmpdeviceRespository.delete(deviceID);
+			this.tempDeviceRepository.delete(deviceID);
 		}else{
 			result.put("result", false);
-			result.put("message", "not find TmpDevice by deviceID="+deviceID);
+			result.put("message", "not find TempDevice by deviceID="+deviceID);
 		}
 		
 		result.put("result", true);

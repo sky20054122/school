@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 import com.brxy.school.common.CommonConstants;
 import com.brxy.school.common.DeviceStatus;
-import com.brxy.school.common.Firmversion;
+import com.brxy.school.common.FirmVersion;
 import com.brxy.school.model.device.Booth;
 import com.brxy.school.model.device.Displayer;
 import com.brxy.school.model.device.MediaURL;
@@ -45,7 +45,7 @@ public class Device implements Serializable {
 	private String deviceName;
 
 	@Column(name = "FIRMVERSION", nullable = false)
-	private Firmversion firmversion;
+	private FirmVersion firmVersion;
 
 	@Column(name = "DEVICE_STATUS", nullable = false)
 	private DeviceStatus deviceStatus;
@@ -114,12 +114,12 @@ public class Device implements Serializable {
 		this.deviceName = deviceName;
 	}
 
-	public Firmversion getFirmversion() {
-		return firmversion;
+	public FirmVersion getFirmVersion() {
+		return firmVersion;
 	}
 
-	public void setFirmversion(Firmversion firmversion) {
-		this.firmversion = firmversion;
+	public void setFirmVersion(FirmVersion firmVersion) {
+		this.firmVersion = firmVersion;
 	}
 
 	public DeviceStatus getDeviceStatus() {
@@ -233,7 +233,7 @@ public class Device implements Serializable {
 		int result = 1;
 		result = prime * result + ((deviceId == null) ? 0 : deviceId.hashCode());
 		result = prime * result + ((deviceName == null) ? 0 : deviceName.hashCode());
-		result = prime * result + ((firmversion == null) ? 0 : firmversion.hashCode());
+		result = prime * result + ((firmVersion == null) ? 0 : firmVersion.hashCode());
 		return result;
 	}
 
@@ -256,19 +256,19 @@ public class Device implements Serializable {
 				return false;
 		} else if (!deviceName.equals(other.deviceName))
 			return false;
-		if (firmversion != other.firmversion)
+		if (firmVersion != other.firmVersion)
 			return false;
 		return true;
 	}
 
 	
 	
-	public Device(String deviceId, String deviceName, Firmversion firmversion, DeviceStatus deviceStatus,
+	public Device(String deviceId, String deviceName, FirmVersion firmVersion, DeviceStatus deviceStatus,
 			Date recordDate) {
 		super();
 		this.deviceId = deviceId;
 		this.deviceName = deviceName;
-		this.firmversion = firmversion;
+		this.firmVersion = firmVersion;
 		this.deviceStatus = deviceStatus;
 		this.recordDate = recordDate;
 	}
@@ -277,8 +277,8 @@ public class Device implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Device [deviceId=" + deviceId + ", deviceName=" + deviceName + ", firmversion="
-				+ firmversion + ", deviceStatus=" + deviceStatus + ", recordDate=" + recordDate + ", mediaURL="
+		return "Device [deviceId=" + deviceId + ", deviceName=" + deviceName + ", firmVersion="
+				+ firmVersion + ", deviceStatus=" + deviceStatus + ", recordDate=" + recordDate + ", mediaURL="
 				+ mediaURL + ", pc=" + pc + ", booth=" + booth + ", diplayer=" + displayer + ", sensor=" + sensor
 				+ ", rfid=" + rfid + ", dtsSwitches=" + dtsSwitches + ", screen=" + screen + ", volume=" + volume
 				+ ", channel=" + channel + "]";

@@ -325,7 +325,7 @@ function deviceListInit(data){
 		var device = data[i];
 		html += "<tr><td><input class='cbi-input-checkbox'  type='checkbox' id="+ device.deviceID+ " name='choiceDeviceCheckbox' value='1'></td><td>" 
 		+ device.deviceID + "</td><td>" 
-		+ device.firmversion + "</td><td>" 
+		+ device.firmVersion + "</td><td>"
 		+ device.deviceName	+ "</td></tr>";	
 	}
 	if(html==""){
@@ -436,7 +436,7 @@ function getRFIDDetail(cardID){
 				deviceHtml += "<tr><td>" 
 				+ device.deviceID + "</td><td>" 
 				+ device.deviceName + "</td><td>" 
-				+ device.firmversion	+ "</td></tr>";	
+				+ device.firmVersion	+ "</td></tr>";
 			}
 			if(deviceHtml==""){
 				deviceHtml = "<tr><td colspan='4'>暂无关联设备数据</td></tr>";
