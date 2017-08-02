@@ -14,6 +14,10 @@ public class SchoolApplication {
         factory.setMaxRequestSize("120MB");  
         return factory.createMultipartConfig();  
     }  */
+	
+	
+
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolApplication.class, args);

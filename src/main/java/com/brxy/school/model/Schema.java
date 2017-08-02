@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -52,7 +53,7 @@ public class Schema implements Serializable {
 	@Column(name="UPDATE_DATE")
 	private Date updateDate;
 	
-	@OneToMany(fetch=FetchType.LAZY,mappedBy="schema")
+	@OneToMany(fetch=FetchType.LAZY,mappedBy="schema",cascade=CascadeType.ALL)
 	private Set<Schedule> schedules = new HashSet<Schedule>();
 
 	
@@ -115,6 +116,18 @@ public class Schema implements Serializable {
 
 	public Schema() {
 		super();
+	}
+	
+	
+
+	public Schema(Long id, String name, SchemaStatus schemaStatus, String comments, Date recordDate, Date updateDate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.schemaStatus = schemaStatus;
+		this.comments = comments;
+		this.recordDate = recordDate;
+		this.updateDate = updateDate;
 	}
 
 	@Override

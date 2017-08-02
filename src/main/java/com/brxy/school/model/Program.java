@@ -40,14 +40,20 @@ public class Program implements Serializable {
 	/**
 	 * 文件的md5值 ，在文件系统中作为文件的名称  例如 md5.mp3
 	 */
-	@Column(name="MD5")
+	@Column(name="MD5",nullable=false,unique=true)
 	private String md5;
 	
 	@Column(name="DURATION")
-	private String duration;
+	private Long duration;
 	
 	@Column(name="RECORD_DATE")
 	private Date recordDate;
+	
+	@Column(name="FILE_EXTENSION")
+	private String fileExtension;
+	
+	@Column(name="FILE_SIZE")
+	private Long fileSize;
 	
 	@Column(name="COMMENT")
 	private String comment;
@@ -78,11 +84,11 @@ public class Program implements Serializable {
 		this.name = name;
 	}
 
-	public String getDuration() {
+	public Long getDuration() {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
+	public void setDuration(Long duration) {
 		this.duration = duration;
 	}
 
@@ -102,6 +108,17 @@ public class Program implements Serializable {
 		this.comment = comment;
 	}
 
+	
+	public Long getFileSize() {
+		return fileSize;
+	}
+
+
+	public void setFileSize(Long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+
 	@JsonIgnore
 	public Set<Schedule> getSchedules() {
 		return schedules;
@@ -112,6 +129,16 @@ public class Program implements Serializable {
 	}
 	
 	
+
+	public String getFileExtension() {
+		return fileExtension;
+	}
+
+
+	public void setFileExtension(String fileExtension) {
+		this.fileExtension = fileExtension;
+	}
+
 
 	public String getMd5() {
 		return md5;
@@ -131,7 +158,7 @@ public class Program implements Serializable {
 
 	
 
-	public Program(String name, String duration, Date recordDate, String comment) {
+	public Program(String name, Long duration, Date recordDate, String comment) {
 		super();
 		this.name = name;
 		this.duration = duration;
@@ -140,7 +167,7 @@ public class Program implements Serializable {
 	}
 
 
-	public Program(Long id, String name, String duration, Date recordDate, String comment) {
+	public Program(Long id, String name, Long duration, Date recordDate, String comment) {
 		super();
 		this.id = id;
 		this.name = name;

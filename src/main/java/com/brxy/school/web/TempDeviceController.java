@@ -1,8 +1,10 @@
 package com.brxy.school.web;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.brxy.school.model.TempDevice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.brxy.school.model.TempDevice;
-import com.brxy.school.service.TmpDeviceService;
+import com.brxy.school.service.TempDeviceService;
 
 /**
 *
@@ -21,13 +22,13 @@ import com.brxy.school.service.TmpDeviceService;
 */
 @Controller
 @RequestMapping("/tmpDevice")
-public class TmpDeviceOntroller {
+public class TempDeviceController {
 
 	
-	private static final Logger logger = LoggerFactory.getLogger(TmpDeviceOntroller.class);
+	private static final Logger logger = LoggerFactory.getLogger(TempDeviceController.class);
 	
 	@Autowired
-	private TmpDeviceService tmpDeviceService;
+	private TempDeviceService tempDeviceService;
 	
 	@RequestMapping(value="/main")
 	public String getTmpDeviceMain(){
@@ -38,9 +39,12 @@ public class TmpDeviceOntroller {
 	
 	@ResponseBody
 	@RequestMapping(value="/list")
-	public List<TempDevice> getTmpDeviceList(){
+	public Map<String,Object> getTmpDeviceList(){
 		logger.info("getTmpDeviceList");
-		return this.tmpDeviceService.findAll();
+		List<TempDevice> list = this.tempDeviceService.findAll();
+		Map<String,Object> result = new HashMap<>();
+		result.put("data", list);
+		return result;
 	}
 	
 	@ResponseBody
@@ -48,6 +52,6 @@ public class TmpDeviceOntroller {
 	public Map<String,Object> activeTmpDevice(@RequestParam("deviceID")String deviceID){
 		
 		logger.info("activeTmpDevice");
-		return this.tmpDeviceService.actviveTmpDevice(deviceID);
+		return this.tempDeviceService.actviveTmpDevice(deviceID);
 	}
 }

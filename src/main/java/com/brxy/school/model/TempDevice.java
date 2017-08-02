@@ -48,7 +48,7 @@ public class TempDevice implements Serializable {
 		this.deviceName = deviceName;
 	}
 
-	public FirmVersion getFirmVersion() {
+	public FirmVersion getfirmVersion() {
 		return firmVersion;
 	}
 

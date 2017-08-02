@@ -10,7 +10,7 @@ import com.brxy.school.model.TempDevice;
 *@author xiaobing
 *@version 2016年4月22日 上午10:04:43
 */
-public interface TmpDeviceService {
+public interface TempDeviceService {
 
 	
 	public List<TempDevice> findAll();

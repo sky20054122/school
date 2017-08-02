@@ -61,7 +61,7 @@ function deviceListInit(data){
 	var html = "";
 	for ( var i in data) {
 		var device = data[i];
-		html += "<tr><td>" + device.deviceID + "</td><td>" + device.firmversion
+		html += "<tr><td>" + device.deviceID + "</td><td>" + device.firmVersion
 				+"<td>" + device.deviceName
 				+ "</td><td><input type='button' name='activeDevice' id="
 				+ device.deviceID

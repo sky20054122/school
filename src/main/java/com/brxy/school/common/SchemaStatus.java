@@ -5,7 +5,7 @@ public enum SchemaStatus {
 	/**
 	 * 已禁用
 	 */
-	DISBALED,
+	DISABLED,
 
 	/**
 	 * 已啟用
